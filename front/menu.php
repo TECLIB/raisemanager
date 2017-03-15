@@ -30,14 +30,47 @@
 include ("../../../inc/includes.php");
 
 Html::header(
-   __("Raises management", "raisemanager"),
+   __("Raises", "raisemanager"),
    $_SERVER['PHP_SELF'],
-   "config",
+   "management",
    "PluginRaisemanagerMenu"
 );
 
-if (PluginRaisemanagerRaiseTemplate::canView()) {
+$PluginRaisemanagerRaiseTemplate     = new PluginRaisemanagerRaiseTemplate();
+$PluginRaisemanagerRaiseLevel = new PluginRaisemanagerRaiseLevel();
+
+//If there's only one possibility, do not display menu!
+if (PluginRaisemanagerRaiseTemplate::canView() && !PluginRaisemanagerRaiseLevel::canView()) {
    Html::redirect(Toolbox::getItemTypeSearchURL('PluginRaisemanagerRaiseTemplate'));
+
+} elseif(!PluginRaisemanagerRaiseTemplate::canView() && PluginRaisemanagerRaiseLevel::canView()) {
+   Html::redirect(Toolbox::getItemTypeSearchURL('PluginRaisemanagerRaiseLevel'));
+}
+
+if (PluginRaisemanagerRaiseTemplate::canView() || PluginRaisemanagerRaiseLevel::canView()) {
+   echo "<div class='center'>";
+   echo "<table class='tab_cadre'>";
+   echo "<tr><th colspan='2'>" . __("Raises", "raisemanager") . "</th></tr>";
+
+   if (PluginRaisemanagerRaiseTemplate::canView()) {
+      echo "<tr class='tab_bg_1' align='center'>";
+//      echo "<td><img src='../pics/order-icon.png'></td>";
+      echo "<td><a href='".Toolbox::getItemTypeSearchURL('PluginRaisemanagerRaiseTemplate')."'>" .
+         __("Raise templates", "raisemanager") . "</a></td></tr>";
+   }
+
+   if (PluginRaisemanagerRaiseLevel::canView()) {
+      echo "<tr class='tab_bg_1' align='center'>";
+//      echo "<td><img src='../pics/reference-icon.png'></td>";
+      echo "<td><a href='".Toolbox::getItemTypeSearchURL('PluginRaisemanagerRaiseLevel')."'>" .
+         __("Raise levels", "raisemanager") . "</a></td></tr>";
+   }
+
+   echo "</table></div>";
+} else {
+   echo "<div align='center'><br><br><img src=\"" . $CFG_GLPI["root_doc"] .
+         "/pics/warning.png\" alt=\"warning\"><br><br>";
+   echo "<b>" . __("Access denied") . "</b></div>";
 }
 
 Html::footer();
