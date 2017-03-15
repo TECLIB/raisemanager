@@ -26,12 +26,18 @@
  --------------------------------------------------------------------------
  */
 
+foreach (glob(GLPI_ROOT . '/plugins/raisemanager/inc/*.php') as $file) {
+   include_once ($file);
+}
+
 /**
  * Plugin install process
  *
  * @return boolean
  */
 function plugin_raisemanager_install() {
+   $migration = new Migration(PLUGIN_RAISEMANAGER_VERSION);
+   PluginRaisemanagerRaiseTemplate::install($migration);
    return true;
 }
 
