@@ -30,17 +30,17 @@
 include ("../../../inc/includes.php");
 
 Html::header(
-   __("Raises", "raisemanager"),
+   __("Raise Levels", "raisemanager"),
    $_SERVER['PHP_SELF'],
    "config",
    "PluginRaiseManagerMenu",
-   "raisetemplate"
+   "raiselevel"
 );
 
-$raisetemplate = new PluginRaisemanagerRaiseTemplate();
+$raiselevel = new PluginRaisemanagerRaiseLevel();
 
-if (PluginRaisemanagerRaiseTemplate::canView() || Session::haveRight("config", UPDATE)) {
-   Search::show("PluginRaisemanagerRaiseTemplate");
+if (PluginRaisemanagerRaiseLevel::canView() || Session::haveRight("config", UPDATE)) {
+   Search::show("PluginRaisemanagerRaiseLevel");
 } else {
    echo "<div align='center'><br><br><img src=\""
       . $CFG_GLPI["root_doc"] . "/pics/warning.png\" alt=\"warning\"><br><br>";

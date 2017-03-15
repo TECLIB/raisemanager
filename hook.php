@@ -38,6 +38,7 @@ foreach (glob(GLPI_ROOT . '/plugins/raisemanager/inc/*.php') as $file) {
 function plugin_raisemanager_install() {
    $migration = new Migration(PLUGIN_RAISEMANAGER_VERSION);
    PluginRaisemanagerRaiseTemplate::install($migration);
+   PluginRaisemanagerRaiseLevel::install($migration);
    return true;
 }
 

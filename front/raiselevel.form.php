@@ -29,22 +29,37 @@
 
 include ("../../../inc/includes.php");
 
-Html::header(
-   __("Raises", "raisemanager"),
+$raiselevel = new PluginRaisemanagerRaiseLevel();
+
+if (isset($_POST['add'])) {
+   $raiselevel->add($_POST);
+   Html::back();
+}
+
+if (isset($_POST['update'])) {
+   $raiselevel->update($_POST);
+   Html::back();
+}
+
+if (isset($_POST['purge'])) {
+   $raiselevel->delete($_POST);
+   $raiselevel->redirectToList();
+}
+
+if (empty($_GET["id"])) {
+   $_GET["id"] = '';
+}
+if (!isset($_GET["withtemplate"])) {
+   $_GET["withtemplate"] = '';
+}
+
+Html::header(__("Raise levels management", "raisemanager"),
    $_SERVER['PHP_SELF'],
    "config",
-   "PluginRaiseManagerMenu",
-   "raisetemplate"
+   "PluginRaisemanagerMenu",
+   "raisemanager"
 );
 
-$raisetemplate = new PluginRaisemanagerRaiseTemplate();
-
-if (PluginRaisemanagerRaiseTemplate::canView() || Session::haveRight("config", UPDATE)) {
-   Search::show("PluginRaisemanagerRaiseTemplate");
-} else {
-   echo "<div align='center'><br><br><img src=\""
-      . $CFG_GLPI["root_doc"] . "/pics/warning.png\" alt=\"warning\"><br><br>";
-   echo "<b>" . __("Access denied") . "</b></div>";
-}
+$raiselevel->display($_GET['id']);
 
 Html::footer();
