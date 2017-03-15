@@ -31,7 +31,7 @@ if (!defined('GLPI_ROOT')){
    die("Sorry. You can't access directly to this file");
 }
 
-class PluginRaiseManagerRaiseTemplate extends CommonDBTM {
+class PluginRaisemanagerRaiseTemplate extends CommonDBTM {
    public $dohistory = true;
 
    // ITIL Categories linked to this template
@@ -41,6 +41,107 @@ class PluginRaiseManagerRaiseTemplate extends CommonDBTM {
 
    public static function getTypeName($nb = 0) {
       return __("Raise template", "raisemanager");
+   }
+
+   public static function canCreate() {
+      return true;
+   }
+
+   public static function canPurge() {
+      return true;
+   }
+
+   public static function canDelete() {
+      return true;
+   }
+
+   public static function canUpdate() {
+      return true;
+   }
+
+   public static function canView() {
+      return true;
+   }
+
+   public function defineTabs($options=array()) {
+      $ong = array();
+      //add main tab for current object
+      $this->addDefaultFormTab($ong);
+      //$this->addStandardTab('PluginRaisemanagerRaiseLevel', $ong, $options);
+
+      return $ong;
+   }
+
+   /**
+    * Définition du nom de l'onglet
+   **/
+   function getTabNameForItem(CommonGLPI $item, $withtemplate=0) {
+      switch ($item::getType()) {
+         case __CLASS__:
+            return __('RaiseTemplate', 'raisemanager');
+            break;
+      }
+      return '';
+   }
+
+   /**
+    * Show form
+    *
+    * @param integer $ID      Item ID
+    * @param array   $options Options
+    *
+    * @return void
+    */
+   function showForm($ID, $options=array()) {
+      global $CFG_GLPI, $DB;
+      
+      $this->getFromDB($ID);
+      $this->showFormHeader($options);
+
+      echo "<tr class='tab_bg_1'>";
+      echo "<td>".__('Name')."</td>";
+      echo "<td>";
+      Html::autocompletionTextField($this, "name");
+      echo "</td>";
+      echo "<td rowspan='3'>".__('Comments')."</td>";
+      echo "<td rowspan='3'>";
+      echo "<textarea name='comment' >".$this->fields["comment"]."</textarea>";
+      echo "</td></tr>";
+
+      echo "<tr class='tab_bg_1'><td>".__('Calendar')."</td>";
+      echo "<td>";
+
+      Calendar::dropdown(array('value'      => $this->fields["calendars_id"],
+                               'emptylabel' => __('24/7'),
+                               'toadd'      => array('-1' => __('Calendar of the template'))));
+      echo "</td></tr>";
+
+
+      echo "<tr class='tab_bg_1'><td>".__('Subtypes')."</td>";
+      echo "<td>";
+
+      $aItilObjects  = array();
+      foreach(get_declared_classes() as $class)
+      {
+          if($class instanceof CommonITILObject) $aItilObjects[] = $class;
+      }
+
+      $aItilObjects = array('Ticket', 'Problem', 'Change');
+
+      Dropdown::showFromArray('itemtypes', $aItilObjects, array(
+        'values'     => explode(', ', $this->fields["itemtypes"]),
+        'multiple'   => true
+      ));
+
+      echo "</td></tr>";
+
+      $this->showFormButtons($options);
+
+      return true;
+   }
+
+   public function storeItemTypes(&$data){
+      $data['itemtypes'] = implode(', ', $data['itemtypes']);
    }
 
    public static function install(Migration $migration) {
@@ -54,12 +155,19 @@ class PluginRaiseManagerRaiseTemplate extends CommonDBTM {
                     `name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
                     `entities_id` int(11) NOT NULL DEFAULT '0',
                     `is_recursive` tinyint(1) NOT NULL DEFAULT '0',
+                    `calendars_id` int(11) NOT NULL DEFAULT '-2',
+                    `itemtypes` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
                     `comment` text COLLATE utf8_unicode_ci,
                     PRIMARY KEY (`id`),
-                    KEY `name` (`name`)
+                    KEY `name` (`name`),
+                    KEY `entities_id` (`entities_id`),
+                    KEY `is_recursive` (`is_recursive`),
+                    KEY `calendars_id` (`calendars_id`)
                   ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ;";
          $DB->query($query) or die ($DB->error());
       }
+
+      return true;
    }
 
    public static function uninstall() {
