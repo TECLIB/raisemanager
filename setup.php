@@ -28,6 +28,10 @@
 
 define('PLUGIN_RAISEMANAGER_VERSION', '0.0.1');
 
+foreach (glob(GLPI_ROOT . '/plugins/raisemanager/inc/*.php') as $file) {
+   include_once ($file);
+}
+
 /**
  * Init hooks of the plugin.
  * REQUIRED
@@ -35,9 +39,29 @@ define('PLUGIN_RAISEMANAGER_VERSION', '0.0.1');
  * @return void
  */
 function plugin_init_raisemanager() {
-   global $PLUGIN_HOOKS;
+   global $PLUGIN_HOOKS,$LANG,$CFG_GLPI;
 
    $PLUGIN_HOOKS['csrf_compliant']['raisemanager'] = true;
+
+   $plugin = new Plugin();
+   if ($plugin->isInstalled("raisemanager") && $plugin->isActivated("raisemanager")) {
+
+      Plugin::registerClass('PluginRaisemanagerRaiseTemplate');
+      Plugin::registerClass('PluginRaisemanagerMenu');
+
+      if (Session::getLoginUserID()) {
+
+         if (Session::haveRight("config", UPDATE)) {
+            $PLUGIN_HOOKS['config_page']['raisemanager'] = 'front/config.form.php';
+         }
+
+         //if (PluginRaiseManagerRaiseTemplate::canView()) {
+            $PLUGIN_HOOKS['menu_toadd']['raisemanager'] = array('config' => 'PluginRaiseManagerMenu');
+         //}
+
+      }
+   }
+
 }
 
 
