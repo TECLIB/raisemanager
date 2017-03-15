@@ -48,6 +48,7 @@ function plugin_init_raisemanager() {
 
       Plugin::registerClass('PluginRaisemanagerRaiseTemplate');
       Plugin::registerClass('PluginRaisemanagerRaiseLevel');
+      Plugin::registerClass('PluginRaisemanagerRaiseLevelTemplate');
       Plugin::registerClass('PluginRaisemanagerMenu');
 
       if (Session::getLoginUserID()) {

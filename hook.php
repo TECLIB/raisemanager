@@ -39,6 +39,7 @@ function plugin_raisemanager_install() {
    $migration = new Migration(PLUGIN_RAISEMANAGER_VERSION);
    PluginRaisemanagerRaiseTemplate::install($migration);
    PluginRaisemanagerRaiseLevel::install($migration);
+   PluginRaisemanagerRaiseLevelTemplate::install($migration);
    return true;
 }
 
