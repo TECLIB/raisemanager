@@ -51,6 +51,12 @@ function plugin_init_raisemanager() {
       Plugin::registerClass('PluginRaisemanagerRaiseLevelTemplate');
       Plugin::registerClass('PluginRaisemanagerMenu');
 
+      $PLUGIN_HOOKS['item_get_events']['raisemanager'] = array(
+         'NotificationTargetTicket' => 'plugin_raisemanager_add_events', 
+         'NotificationTargetChange' => 'plugin_raisemanager_add_events',
+         'NotificationTargetProblem' => 'plugin_raisemanager_add_prevents'
+      );
+
       if (Session::getLoginUserID()) {
 
          if (Session::haveRight("config", UPDATE)) {
