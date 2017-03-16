@@ -27,7 +27,7 @@
  @since     2009
  ---------------------------------------------------------------------- */
 
-if (!defined('GLPI_ROOT')){
+if (!defined('GLPI_ROOT')) {
    die("Sorry. You can't access directly to this file");
 }
 
@@ -66,8 +66,10 @@ class PluginRaisemanagerRaiseLevel extends CommonDBTM {
       //add main tab for current object
       $this->addDefaultFormTab($ong);
 
-      if ($this->fields['id'] > 0) $this->addStandardTab('PluginRaisemanagerRaiseLevelTemplate', $ong, $options);
-      $this->addStandardTab('Log',$ong,$options);
+      if ($this->fields['id'] > 0) {
+         $this->addStandardTab('PluginRaisemanagerRaiseLevelTemplate', $ong, $options);
+      }
+      $this->addStandardTab('Log', $ong, $options);
 
       return $ong;
    }
@@ -94,7 +96,7 @@ class PluginRaisemanagerRaiseLevel extends CommonDBTM {
     */
    function showForm($ID, $options=array()) {
       global $CFG_GLPI, $DB;
-      
+
       $this->getFromDB($ID);
       $this->showFormHeader($options);
 
@@ -108,11 +110,10 @@ class PluginRaisemanagerRaiseLevel extends CommonDBTM {
       echo "<textarea name='comment' >".$this->fields["comment"]."</textarea>";
       echo "</td></tr>";
 
-
       echo "<tr class='tab_bg_1'><td>".__('Is Multiple')."</td>";
       echo "<td>";
 
-      Dropdown::showYesNo('trigger_is_multiple',  $this->fields["trigger_is_multiple"]);
+      Dropdown::showYesNo('trigger_is_multiple', $this->fields["trigger_is_multiple"]);
 
       echo "</td></tr>";
 

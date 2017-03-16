@@ -27,7 +27,7 @@
  @since     2009
  ---------------------------------------------------------------------- */
 
-if (!defined('GLPI_ROOT')){
+if (!defined('GLPI_ROOT')) {
    die("Sorry. You can't access directly to this file");
 }
 
@@ -37,7 +37,7 @@ class PluginRaisemanagerRaiseLevelTemplate extends CommonDBTM {
    static public $items_id_1 = 'templates_id';
    static public $itemtype_2 = 'itemtype';
    static public $items_id_2 = 'items_id';
-   
+
    static protected $linkableClasses = array('PluginRaisemanagerRaiseLevel');
 
 
@@ -45,7 +45,6 @@ class PluginRaisemanagerRaiseLevelTemplate extends CommonDBTM {
       global $LANG;
       return __s('Elements');
    }
-
 
    public static function canCreate() {
       return true;
@@ -68,12 +67,12 @@ class PluginRaisemanagerRaiseLevelTemplate extends CommonDBTM {
    }
 
    static function countForItem($id) {
-   	  return countElementsInTable(getTableForItemType(__CLASS__), "`templates_id`='$id'");
+      return countElementsInTable(getTableForItemType(__CLASS__), "`templates_id`='$id'");
    }
 
    /**
     * Count the number of relations having the itemtype of $item
-    * 
+    *
     * @param CommonDBTM $item Item whose relations to raisetemplates shall be counted
     * @return integer count of relations between the item and raisetemplates
     */
@@ -81,7 +80,7 @@ class PluginRaisemanagerRaiseLevelTemplate extends CommonDBTM {
       $id = $item->getField('id');
       $itemtype = $item->getType();
 
-   	  return countElementsInTable(getTableForItemType(__CLASS__), "`items_id`='$id' AND `itemtype`='$itemtype'");
+      return countElementsInTable(getTableForItemType(__CLASS__), "`items_id`='$id' AND `itemtype`='$itemtype'");
    }
 
    /**
@@ -89,10 +88,10 @@ class PluginRaisemanagerRaiseLevelTemplate extends CommonDBTM {
     */
    static function cleanForItem(CommonDBTM $item) {
       $oObj = new self();
-      
+
       $aCriteria = array(
-      	'itemtype' => $item->getType(),
-        'items_id' => $item->getField('id')
+         'itemtype' => $item->getType(),
+         'items_id' => $item->getField('id')
       );
 
       $oObj->deleteByCriteria($aCriteria);
@@ -115,7 +114,7 @@ class PluginRaisemanagerRaiseLevelTemplate extends CommonDBTM {
 
    static function showForTemplate(PluginRaisemanagerRaiseTemplate $template) {
       global $DB, $LANG;
-      
+
       if (!$template->canView()) {
          return false;
       }
@@ -148,36 +147,36 @@ class PluginRaisemanagerRaiseLevelTemplate extends CommonDBTM {
             echo "</tr>";
          }
       }
-      
+
       if (PluginRaisemanagerRaiseTemplate::canUpdate()) {
          echo "<tr class='tab_bg_1'><td colspan='4' class='center'>";
          if (empty($results)) {
             echo "<input type='hidden' name='templates_id' value='".$template->getID()."'>";
             // TODO : Dropdown::showAllItems is deprecated, use Dropdown::showSelectItemFromItemtypes instead
-            Dropdown::showAllItems("items_id",0,0,$template->fields['entities_id'], self::getClasses());
+            Dropdown::showAllItems("items_id", 0, 0, $template->fields['entities_id'], self::getClasses());
             echo "</td>";
             echo "<td colspan='2' class='center' class='tab_bg_2'>";
             echo "<input type='submit' name='additem' value=\""._sx('button', 'Add')."\" class='submit'>";
             echo "</td></tr>";
          }
-   
+
          if (!empty($results)) {
             Html::openArrowMassives('items', true);
             Html::closeArrowMassives(array('delete_items' => _sx('button', 'Disconnect')));
          }
       }
-      echo "</table>" ;
+      echo "</table>";
       Html::closeForm();
       echo "</div>";
    }
-   
+
    static function showForItem(CommonDBTM $item) {
       global $DB, $LANG;
-      
+
       if (!$item->canView()) {
          return false;
       }
-      
+
       $results = getAllDatasFromTable(getTableForItemType(__CLASS__),
                                      "`items_id` = '".$item->getID()."' AND `itemtype`='".get_class($item)."'");
       echo "<div class='spaced'>";
@@ -211,7 +210,7 @@ class PluginRaisemanagerRaiseLevelTemplate extends CommonDBTM {
             echo "</tr>";
          }
       }
-      
+
       if (PluginRaisemanagerRaiseTemplate::canUpdate()) {
          echo "<tr class='tab_bg_1'><td colspan='4' class='center'>";
          echo "<input type='hidden' name='items_id' value='".$item->getID()."'>";
@@ -231,20 +230,20 @@ class PluginRaisemanagerRaiseLevelTemplate extends CommonDBTM {
          echo "<td colspan='2' class='center' class='tab_bg_2'>";
          echo "<input type='submit' name='additem' value=\""._sx('button', 'Save')."\" class='submit'>";
          echo "</td></tr>";
-         
+
          if (!empty($results)) {
             Html::openArrowMassives('items', true);
             Html::closeArrowMassives(array ('delete_items' => _sx('button', 'Disconnect')));
          }
       }
-      echo "</table>" ;
+      echo "</table>";
       Html::closeForm();
       echo "</div>";
    }
 
    public function getTabNameForItem(CommonGLPI $item, $withtemplate=0) {
       global $CFG_GLPI;
-      
+
       if (PluginRaisemanagerRaiseTemplate::canView()) {
          switch ($item->getType()) {
             case 'PluginRaisemanagerRaiseTemplate' :
@@ -262,16 +261,16 @@ class PluginRaisemanagerRaiseLevelTemplate extends CommonDBTM {
       return '';
    }
 
-	/**
-    * 
+   /**
+    *
     * Count the number of associated items for a raisetemplate item
-    * 
+    *
     * @param $item   RaiseTemplate object
     **/
    static function countForTemplate(PluginRaisemanagerRaiseTemplate $item) {
-   
+
       $restrict = "`".getTableForItemType(__CLASS__)."`.`templates_id` = '".$item->getField('id')."'";
-   	
+
       return countElementsInTable(array(getTableForItemType(__CLASS__)), $restrict);
    }
 
@@ -279,7 +278,7 @@ class PluginRaisemanagerRaiseLevelTemplate extends CommonDBTM {
    static function displayTabContentForItem(CommonGLPI $item, $tabnum=1, $withtemplate=0) {
       if (in_array(get_class($item), PluginRaisemanagerRaiseLevelTemplate::getClasses())) {
          self::showForItem($item);
-      } elseif (get_class($item) == 'PluginRaisemanagerRaiseTemplate') {
+      } else if (get_class($item) == 'PluginRaisemanagerRaiseTemplate') {
          self::showForTemplate($item);
       }
       return true;
@@ -311,5 +310,4 @@ class PluginRaisemanagerRaiseLevelTemplate extends CommonDBTM {
 
       $DB->query("DROP TABLE IF EXISTS `" . getTableForItemType(__CLASS__) . "`") or die ($DB->error());
    }
-   
 }

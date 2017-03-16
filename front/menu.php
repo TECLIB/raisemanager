@@ -43,7 +43,7 @@ $PluginRaisemanagerRaiseLevel = new PluginRaisemanagerRaiseLevel();
 if (PluginRaisemanagerRaiseTemplate::canView() && !PluginRaisemanagerRaiseLevel::canView()) {
    Html::redirect(Toolbox::getItemTypeSearchURL('PluginRaisemanagerRaiseTemplate'));
 
-} elseif(!PluginRaisemanagerRaiseTemplate::canView() && PluginRaisemanagerRaiseLevel::canView()) {
+} else if (!PluginRaisemanagerRaiseTemplate::canView() && PluginRaisemanagerRaiseLevel::canView()) {
    Html::redirect(Toolbox::getItemTypeSearchURL('PluginRaisemanagerRaiseLevel'));
 }
 
@@ -54,14 +54,14 @@ if (PluginRaisemanagerRaiseTemplate::canView() || PluginRaisemanagerRaiseLevel::
 
    if (PluginRaisemanagerRaiseTemplate::canView()) {
       echo "<tr class='tab_bg_1' align='center'>";
-//      echo "<td><img src='../pics/order-icon.png'></td>";
+      //echo "<td><img src='../pics/order-icon.png'></td>";
       echo "<td><a href='".Toolbox::getItemTypeSearchURL('PluginRaisemanagerRaiseTemplate')."'>" .
          __("Raise templates", "raisemanager") . "</a></td></tr>";
    }
 
    if (PluginRaisemanagerRaiseLevel::canView()) {
       echo "<tr class='tab_bg_1' align='center'>";
-//      echo "<td><img src='../pics/reference-icon.png'></td>";
+      //echo "<td><img src='../pics/reference-icon.png'></td>";
       echo "<td><a href='".Toolbox::getItemTypeSearchURL('PluginRaisemanagerRaiseLevel')."'>" .
          __("Raise levels", "raisemanager") . "</a></td></tr>";
    }
