@@ -54,11 +54,12 @@ if (!isset($_GET["withtemplate"])) {
    $_GET["withtemplate"] = '';
 }
 
-Html::header(__("Raises management", "raisemanager"),
+Html::header(
+   __("Raises", "raisemanager"),
    $_SERVER['PHP_SELF'],
    "config",
-   "PluginRaisemanagerMenu",
-   "raisemanager"
+   "PluginRaiseManagerMenu",
+   "raisetemplate"
 );
 
 $raisetemplate->display($_GET['id']);

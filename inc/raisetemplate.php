@@ -130,7 +130,7 @@ class PluginRaisemanagerRaiseTemplate extends CommonDBTM {
          }
       }
 
-      $aItilObjects = array('Ticket', 'Problem', 'Change');
+      $aItilObjects = array('Ticket' => 'Ticket', 'Problem' => 'Problem', 'Change' => 'Change');
 
       Dropdown::showFromArray('itemtypes', $aItilObjects, array(
         'values'     => explode(', ', $this->fields["itemtypes"]),

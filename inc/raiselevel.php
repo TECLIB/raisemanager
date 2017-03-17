@@ -100,6 +100,8 @@ class PluginRaisemanagerRaiseLevel extends CommonDBTM {
       $this->getFromDB($ID);
       $this->showFormHeader($options);
 
+      $aDurationTypes = array('SECOND' => 'Secondes', 'MINUTE' => 'Minutes', 'DAY' => 'Jours', 'WEEK' => 'Semaines', 'MONTH' => 'Mois', 'YEAR' => 'Années');
+
       echo "<tr class='tab_bg_1'>";
       echo "<td>".__('Name')."</td>";
       echo "<td>";
@@ -117,13 +119,15 @@ class PluginRaisemanagerRaiseLevel extends CommonDBTM {
 
       echo "</td></tr>";
 
-      echo "<tr class='tab_bg_1'><td>".__('Trigger Type')."</td>";
+      echo "<tr><td>" . __('Send Value') . "</td>";
+      echo "<td><input type='text' name='send_value' value='".$this->fields["send_value"]."'>";
+      echo "</td></tr>";
+
+      echo "<tr class='tab_bg_1'><td>".__('Send Type')."</td>";
       echo "<td>";
 
-      $aDurationTypes = array('Secondes', 'Minutes', 'Jours', 'Semaines', 'Mois', 'Années');
-
       Dropdown::showFromArray('trigger_unit', $aDurationTypes, array(
-        'values'     => explode(', ', $this->fields["trigger_unit"]),
+        'values'     => explode(', ', $this->fields["send_unit"]),
         'multiple'   => false
       ));
 
@@ -131,6 +135,16 @@ class PluginRaisemanagerRaiseLevel extends CommonDBTM {
 
       echo "<tr><td>" . __('Trigger Value') . "</td>";
       echo "<td><input type='text' name='trigger_value' value='".$this->fields["trigger_value"]."'>";
+      echo "</td></tr>";
+
+      echo "<tr class='tab_bg_1'><td>".__('Trigger Type')."</td>";
+      echo "<td>";
+
+      Dropdown::showFromArray('trigger_unit', $aDurationTypes, array(
+        'values'     => explode(', ', $this->fields["trigger_unit"]),
+        'multiple'   => false
+      ));
+
       echo "</td></tr>";
 
       $this->showFormButtons($options);
@@ -149,8 +163,10 @@ class PluginRaisemanagerRaiseLevel extends CommonDBTM {
                     `name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
                     `entities_id` int(11) NOT NULL DEFAULT '0',
                     `is_recursive` tinyint(1) NOT NULL DEFAULT '0',
+                    `send_value` int(11) NOT NULL DEFAULT '1',
+                    `send_unit` varchar(11) NOT NULL DEFAULT '0', 
                     `trigger_value` int(11) NOT NULL DEFAULT '1',
-                    `trigger_unit` int(11) NOT NULL DEFAULT '0',
+                    `trigger_unit` varchar(11) NOT NULL DEFAULT '0',                  
                     `trigger_is_multiple` tinyint(1) NOT NULL DEFAULT '0',
                     `comment` text COLLATE utf8_unicode_ci,
                     PRIMARY KEY (`id`),
