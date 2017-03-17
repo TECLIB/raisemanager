@@ -219,7 +219,7 @@ class PluginRaisemanagerRaiseLevelTemplate extends CommonDBTM {
          $query = "SELECT `id`
                    FROM `".getTableForItemType('PluginRaisemanagerRaiseTemplate')."`
                    WHERE `id` IN (SELECT `templates_id`
-                                   FROM `".getTableForItemType(__CLASS__)."`)";
+                                   FROM `".getTableForItemType(__CLASS__)."`AND itemtype = '".$item->getType()."' AND items_id = '".$item->getID()."')";
          foreach ($DB->request($query) as $use) {
             $used[] = $use['id'];
          }
