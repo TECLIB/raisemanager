@@ -74,6 +74,11 @@ class PluginRaisemanagerRaiseLevel extends CommonDBTM {
       return $ong;
    }
 
+   public function computeTotalValue(&$data) {
+     $aDurationValues = array('SECOND' => 1, 'MINUTE' => 60, 'DAY' => 86400, 'WEEK' => 604800, 'MONTH' => 2628001, 'YEAR' => 31536014);
+     $data['send_total_value'] = round($data['send_value'] * $aDurationValues[$data['send_unit']]);
+   }
+
    /**
     * Définition du nom de l'onglet
    **/
@@ -126,7 +131,7 @@ class PluginRaisemanagerRaiseLevel extends CommonDBTM {
       echo "<tr class='tab_bg_1'><td>".__('Send Type')."</td>";
       echo "<td>";
 
-      Dropdown::showFromArray('trigger_unit', $aDurationTypes, array(
+      Dropdown::showFromArray('send_unit', $aDurationTypes, array(
         'values'     => explode(', ', $this->fields["send_unit"]),
         'multiple'   => false
       ));
@@ -163,6 +168,7 @@ class PluginRaisemanagerRaiseLevel extends CommonDBTM {
                     `name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
                     `entities_id` int(11) NOT NULL DEFAULT '0',
                     `is_recursive` tinyint(1) NOT NULL DEFAULT '0',
+                    `send_total_value` int(11) NOT NULL DEFAULT '0',
                     `send_value` int(11) NOT NULL DEFAULT '1',
                     `send_unit` varchar(11) NOT NULL DEFAULT '0', 
                     `trigger_value` int(11) NOT NULL DEFAULT '1',

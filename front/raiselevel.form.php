@@ -32,11 +32,13 @@ include ("../../../inc/includes.php");
 $raiselevel = new PluginRaisemanagerRaiseLevel();
 
 if (isset($_POST['add'])) {
+   $raiselevel->computeTotalValue($_POST);
    $raiselevel->add($_POST);
    Html::back();
 }
 
 if (isset($_POST['update'])) {
+   $raiselevel->computeTotalValue($_POST);
    $raiselevel->update($_POST);
    Html::back();
 }
