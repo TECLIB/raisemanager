@@ -40,8 +40,9 @@ function plugin_raisemanager_install() {
    PluginRaisemanagerRaiseTemplate::install($migration);
    PluginRaisemanagerRaiseLevel::install($migration);
    PluginRaisemanagerRaiseLevelTemplate::install($migration);
+   PluginRaisemanagerRaiseLog::install($migration);
 
-   CronTask::Register('PluginRaisemanagerNotification', 'SendNotifications', MINUTE_TIMESTAMP);
+   CronTask::Register('PluginRaisemanagerNotification', 'SendRaises', MINUTE_TIMESTAMP);
 
    return true;
 }
