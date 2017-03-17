@@ -26,10 +26,6 @@
  --------------------------------------------------------------------------
  */
 
-foreach (glob(GLPI_ROOT . '/plugins/raisemanager/inc/*.php') as $file) {
-   include_once ($file);
-}
-
 /**
  * Plugin install process
  *
@@ -41,6 +37,7 @@ function plugin_raisemanager_install() {
    PluginRaisemanagerRaiseLevel::install($migration);
    PluginRaisemanagerRaiseLevelTemplate::install($migration);
    PluginRaisemanagerRaiseLog::install($migration);
+   PluginRaisemanagerCategoryTemplate::install($migration);
 
    CronTask::Register('PluginRaisemanagerNotification', 'SendRaises', MINUTE_TIMESTAMP);
 

@@ -69,6 +69,7 @@ class PluginRaisemanagerRaiseTemplate extends CommonDBTM {
       $this->addDefaultFormTab($ong);
 
       if ($this->fields['id'] > 0) {
+         $this->addStandardTab('PluginRaisemanagerCategoryTemplate', $ong, $options);
          $this->addStandardTab('PluginRaisemanagerRaiseLevelTemplate', $ong, $options);
       }
       $this->addStandardTab('Log', $ong, $options);
