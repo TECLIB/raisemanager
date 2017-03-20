@@ -27,7 +27,7 @@ class PluginRaisemanagerNotificationEvent extends NotificationEvent {
          //Get template's information
          $template           = new NotificationTemplate();
 
-         $notificationtarget = NotificationTarget::getInstance($item,$event,$options);
+         $notificationtarget = NotificationTarget::getInstance($item, $event, $options);
          if (!$notificationtarget) {
             return false;
          }
@@ -37,9 +37,9 @@ class PluginRaisemanagerNotificationEvent extends NotificationEvent {
                   as $data) {
 
             if (isset($options['notifications_id'])) {
-              if ($data['id'] != $options['notifications_id']) {
-                continue;
-              }
+               if ($data['id'] != $options['notifications_id']) {
+                  continue;
+               }
             }
             $targets = getAllDatasFromTable('glpi_notificationtargets',
                                             'notifications_id = '.$data['id']);
@@ -67,7 +67,7 @@ class PluginRaisemanagerNotificationEvent extends NotificationEvent {
             //Foreach notification targets
             foreach ($targets as $target) {
                //Get all users affected by this notification
-               $notificationtarget->getAddressesByTarget($target,$options);
+               $notificationtarget->getAddressesByTarget($target, $options);
 
                foreach ($notificationtarget->getTargets() as $user_email => $users_infos) {
                   if ($label

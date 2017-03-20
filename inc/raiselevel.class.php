@@ -75,8 +75,8 @@ class PluginRaisemanagerRaiseLevel extends CommonDBTM {
    }
 
    public function computeTotalValue(&$data) {
-     $aDurationValues = array('SECOND' => 1, 'MINUTE' => 60, 'DAY' => 86400, 'WEEK' => 604800, 'MONTH' => 2628001, 'YEAR' => 31536014);
-     $data['send_total_value'] = round($data['send_value'] * $aDurationValues[$data['send_unit']]);
+      $aDurationValues = array('SECOND' => 1, 'MINUTE' => 60, 'DAY' => 86400, 'WEEK' => 604800, 'MONTH' => 2628001, 'YEAR' => 31536014);
+      $data['send_total_value'] = round($data['send_value'] * $aDurationValues[$data['send_unit']]);
    }
 
    /**

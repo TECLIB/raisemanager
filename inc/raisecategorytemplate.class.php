@@ -119,9 +119,9 @@ class PluginRaisemanagerCategoryTemplate extends CommonDBTM {
                       WHERE `id` IN (SELECT `itilcategories_id`
                                       FROM `".getTableForItemType(__CLASS__)."` WHERE templates_id = '".$template->getID()."')";
 
-            foreach ($DB->request($query) as $use) {
+         foreach ($DB->request($query) as $use) {
                $used[] = $use['id'];
-            }
+         }
             Dropdown::show('ITILCategory',
                            array ('name' => "itilcategories_id",
                                   'entity' => $template->fields['entities_id'], 'used' => $used));
