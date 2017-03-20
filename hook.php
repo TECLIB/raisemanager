@@ -45,7 +45,7 @@ function plugin_raisemanager_install() {
 }
 
 function plugin_raisemanager_add_events(NotificationTargetCommonITILObject $target) {
-   $target->events['plugin_raisemanager'] = __("Raise event", 'raisemanager');
+   $target->events['plugin_raisemanager'] = __("RaiseEvent", 'raisemanager');
 }
 
 /**

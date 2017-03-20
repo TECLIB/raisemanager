@@ -123,7 +123,7 @@ class PluginRaisemanagerRaiseLevelTemplate extends CommonDBTM {
       echo "<div class='spaced'>";
       echo "<form id='items' name='items' method='post' action='".Toolbox::getItemTypeFormURL(__CLASS__)."'>";
       echo "<table class='tab_cadre_fixehov'>";
-      echo "<tr><th colspan='6'>".__("Associated item")."</th></tr>";
+      echo "<tr><th colspan='6'>".__("RaiseLevels", 'raisemanager')."</th></tr>";
       if (!empty($results)) {
          echo "<tr><th></th>";
          echo "<th>".__s("Type")."</th>";

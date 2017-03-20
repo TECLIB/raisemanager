@@ -40,7 +40,7 @@ class PluginRaisemanagerRaiseTemplate extends CommonDBTM {
    public $raiselevels     = array();
 
    public static function getTypeName($nb = 0) {
-      return __("Raise template", "raisemanager");
+      return __("RaiseTemplate", "raisemanager");
    }
 
    public static function canCreate() {
@@ -121,7 +121,7 @@ class PluginRaisemanagerRaiseTemplate extends CommonDBTM {
                                'toadd'      => array('-1' => __('Calendar of the template'))));
       echo "</td></tr>";
 
-      echo "<tr class='tab_bg_1'><td>".__('Subtypes')."</td>";
+      echo "<tr class='tab_bg_1'><td>".__('Subtypes', 'raisemanager')."</td>";
       echo "<td>";
 
       $aItilObjects  = array();

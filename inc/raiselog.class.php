@@ -35,7 +35,7 @@ class PluginRaisemanagerRaiseLog extends CommonDBTM {
    public $dohistory = true;
 
    public static function getTypeName($nb = 0) {
-      return __("Raise logs", "raisemanager");
+      return __("RaiseLogs", "raisemanager");
    }
 
    public static function canCreate() {
@@ -68,6 +68,7 @@ class PluginRaisemanagerRaiseLog extends CommonDBTM {
                     `id` int(11) NOT NULL AUTO_INCREMENT,
                     `items_id` int(11) NOT NULL DEFAULT '0' COMMENT 'RELATION to various table, according to itemtype (id)',
                     `levels_id` int(11) NOT NULL DEFAULT '0',
+                    `level_value` int(11) NOT NULL DEFAULT '0',
                     `itemtype` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
                     `date_last_sent` datetime DEFAULT NULL,
                     PRIMARY KEY (`id`),
