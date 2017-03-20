@@ -62,6 +62,6 @@ Html::header(
    "raisetemplate"
 );
 
-$raisetemplate->display($_GET['id']);
+$raisetemplate->display(array('id' => $_GET['id']));
 
 Html::footer();

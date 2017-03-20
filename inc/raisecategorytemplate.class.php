@@ -91,7 +91,7 @@ class PluginRaisemanagerCategoryTemplate extends CommonDBTM {
       echo "<tr><th colspan='6'>".__("ITIL Categories")."</th></tr>";
       if (!empty($results)) {
          echo "<tr><th></th>";
-         echo "<th>".__s("Name")."</th>";
+         echo "<th colspan='4'>".__s("Name")."</th>";
          echo "</tr>";
          foreach ($results as $data) {
             $item = new ITILCategory();
@@ -102,7 +102,7 @@ class PluginRaisemanagerCategoryTemplate extends CommonDBTM {
                echo "<input type='checkbox' name='todelete[".$data['id']."]'>";
             }
             echo "</td>";
-            echo "<td>";
+            echo "<td colspan='4'>";
             echo $item->getLink();
             echo "</td>";
             echo "</tr>";
@@ -111,24 +111,24 @@ class PluginRaisemanagerCategoryTemplate extends CommonDBTM {
 
       if (PluginRaisemanagerRaiseTemplate::canUpdate()) {
          echo "<tr class='tab_bg_1'><td colspan='4' class='center'>";
-         if (empty($results)) {
+
             echo "<input type='hidden' name='templates_id' value='".$template->getID()."'>";
             $used = array();
             $query = "SELECT `id`
                       FROM `".getTableForItemType('ITILCategory')."`
                       WHERE `id` IN (SELECT `itilcategories_id`
-                                      FROM `".getTableForItemType(__CLASS__)." AND templates_id = '".$template->getID()."')";
+                                      FROM `".getTableForItemType(__CLASS__)."` WHERE templates_id = '".$template->getID()."')";
+
             foreach ($DB->request($query) as $use) {
                $used[] = $use['id'];
             }
-            Dropdown::show('PluginRaisemanagerRaiseTemplate',
+            Dropdown::show('ITILCategory',
                            array ('name' => "itilcategories_id",
                                   'entity' => $template->fields['entities_id'], 'used' => $used));
             echo "</td>";
             echo "<td colspan='2' class='center' class='tab_bg_2'>";
             echo "<input type='submit' name='additem' value=\""._sx('button', 'Add')."\" class='submit'>";
             echo "</td></tr>";
-         }
 
          if (!empty($results)) {
             Html::openArrowMassives('items', true);

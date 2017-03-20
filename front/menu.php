@@ -56,14 +56,14 @@ if (PluginRaisemanagerRaiseTemplate::canView() || PluginRaisemanagerRaiseLevel::
       echo "<tr class='tab_bg_1' align='center'>";
       //echo "<td><img src='../pics/order-icon.png'></td>";
       echo "<td><a href='".Toolbox::getItemTypeSearchURL('PluginRaisemanagerRaiseTemplate')."'>" .
-         __("Raise templates", "raisemanager") . "</a></td></tr>";
+         __("RaiseTemplates", "raisemanager") . "</a></td></tr>";
    }
 
    if (PluginRaisemanagerRaiseLevel::canView()) {
       echo "<tr class='tab_bg_1' align='center'>";
       //echo "<td><img src='../pics/reference-icon.png'></td>";
       echo "<td><a href='".Toolbox::getItemTypeSearchURL('PluginRaisemanagerRaiseLevel')."'>" .
-         __("Raise levels", "raisemanager") . "</a></td></tr>";
+         __("RaiseLevels", "raisemanager") . "</a></td></tr>";
    }
 
    echo "</table></div>";

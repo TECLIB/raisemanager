@@ -11,7 +11,7 @@ class PluginRaisemanagerNotification extends CommonDBTM {
    **/
    static function cronInfo($name) {
 
-      return array('description' => __('Send raises to techs'),
+      return array('description' => __('RaiseNotification', 'raisemanager'),
                          'parameter'   => __('None'));
    }
 
@@ -27,27 +27,21 @@ class PluginRaisemanagerNotification extends CommonDBTM {
       $cron_status = 0;
 
       $sRaiseTemplateQuery = '
-      SELECT CONCAT(tmplitilcat.itilcategories_id, \',\') AS itilcategories, tmpl.name, tmpl.itemtypes, lvl.id, lvl.name AS levelname, lvl.send_value, lvl.send_unit, lvl.trigger_value, lvl.trigger_unit, lvl.trigger_is_multiple 
+      SELECT GROUP_CONCAT(DISTINCT tmplitilcat.itilcategories_id ORDER BY tmplitilcat.itilcategories_id DESC SEPARATOR \', \') AS itilcategories, tmpl.name, tmpl.itemtypes, lvl.id, lvl.name AS levelname, lvl.send_value, lvl.send_total_value, lvl.send_unit, lvl.trigger_value, lvl.trigger_unit, lvl.trigger_is_multiple 
       FROM glpi_plugin_raisemanager_raiselevels AS lvl 
       LEFT JOIN glpi_plugin_raisemanager_raiseleveltemplates AS lvltmpl ON lvltmpl.items_id = lvl.id AND itemtype = \'PluginRaisemanagerRaiseLevel\' 
       LEFT JOIN glpi_plugin_raisemanager_raisetemplates AS tmpl ON lvltmpl.templates_id = tmpl.id 
       LEFT JOIN glpi_plugin_raisemanager_categorytemplates AS tmplitilcat ON tmplitilcat.templates_id = tmpl.id 
-      ORDER BY send_total_value';
+      GROUP BY lvl.id ORDER BY send_total_value DESC';
 
-      $oQuery = $DB->request($sRaiseTemplateQuery);
       $aQueries = array();
 
-      foreach ($oQuery as $id => $row) {
+      foreach ($DB->request($sRaiseTemplateQuery) as $id => $row) {
         $iCurrentLevelID = $row['id'];
+        $iCurrentLevelValue = $row['send_total_value'];
         $aItemTypes = explode(', ', $row['itemtypes']);
         $sTriggerAfter = 'INTERVAL '.$row['send_value'].' '.$row['send_unit'];
-        $aItilCategories = explode(',', $row['itilcategories']);
-        $sItilCategories = 'AND itilcategories_id IN (';
-
-        foreach ($aItilCategories as $key => $sItilCategory) {
-          $sItilCategories .= $sItilCategory.', ';
-        }
-        $sItilCategories = substr($sItilCategories, 0, -2).')';
+        $sItilCategories = 'AND itilcategories_id IN ('.$row['itilcategories'].')';
 
         $task->log('Itemtypes in scope : '.$row['itemtypes'].' for RaiseLevel \''.$row['levelname'].'\'');
 
@@ -55,15 +49,15 @@ class PluginRaisemanagerNotification extends CommonDBTM {
           case '1':
             foreach ($aItemTypes as $k => $sItemType) {
               $sRepeatAfter = 'INTERVAL '.$row['trigger_value'].' '.$row['trigger_unit'];
-              $aQueries[$iCurrentLevelID.'::'.$sItemType] = 'SELECT T.id FROM '.getTableForItemType($sItemType).' AS T 
-              LEFT JOIN '.getTableForItemType('PluginRaisemanagerRaiseLog').' AS log ON T.id = log.items_id AND log.itemtype = "'.$sItemType.'" AND levels_id = '.$iCurrentLevelID.' 
-              WHERE status < 5 AND due_date != "" AND ((log.items_id IS NULL AND NOW() > DATE_ADD(date, '.$sTriggerAfter.')) OR (NOW() > DATE_ADD(log.date_last_sent, '.$sRepeatAfter.'))) '.$sItilCategories;
+
+              $aQueries[$iCurrentLevelID.':'.$iCurrentLevelValue.':'.$sItemType] = 'SELECT T.id FROM '.getTableForItemType($sItemType).' AS T 
+              LEFT JOIN '.getTableForItemType('PluginRaisemanagerRaiseLog').' AS log ON T.id = log.items_id AND log.itemtype = "'.$sItemType.'" AND levels_id = '.$iCurrentLevelID.' WHERE status < 5 AND due_date != "" AND ((log.items_id IS NULL AND NOW() > DATE_ADD(date, '.$sTriggerAfter.')) OR (NOW() > DATE_ADD(log.date_last_sent, '.$sRepeatAfter.') AND log.items_id IS NOT NULL)) '.$sItilCategories.' HAVING MAX(log.level_value) = '.$iCurrentLevelValue.'';
             }
             break;
           
           default:
             foreach ($aItemTypes as $k => $sItemType) {
-              $aQueries[$iCurrentLevelID.'::'.$sItemType] = 'SELECT T.id FROM '.getTableForItemType($sItemType).' AS T 
+              $aQueries[$iCurrentLevelID.':'.$iCurrentLevelValue.':'.$sItemType] = 'SELECT T.id FROM '.getTableForItemType($sItemType).' AS T 
               LEFT JOIN '.getTableForItemType('PluginRaisemanagerRaiseLog').' AS log ON T.id = log.items_id AND log.itemtype = "'.$sItemType.'" AND levels_id = '.$iCurrentLevelID.' 
               WHERE log.items_id IS NULL AND status < 5 AND due_date != "" AND NOW() > DATE_ADD(date, '.$sTriggerAfter.') '.$sItilCategories;
             }
@@ -73,36 +67,42 @@ class PluginRaisemanagerNotification extends CommonDBTM {
 
       $aAlreadyNotified = array();
       foreach ($aQueries as $sReference => $sQuery) {
-        $task->log('Executing : '.substr($sQuery, strpos($sQuery, "WHERE")));
-        $oCurrentQuery = $DB->request($sQuery);
+          $task->log('Executing : '.substr($sQuery, 0, strpos($sQuery, "WHERE")));
+          $task->log('Executing : '.substr($sQuery, strpos($sQuery, "WHERE")));
+          $oCurrentQuery = $DB->request($sQuery);
+  
+          $aReferences = explode(':', $sReference);
 
-        $aReferences = explode('::', $sReference);
-        $sItemType = $aReferences[1];
-        $iLevelID = $aReferences[0];
-
-        $task->log(__('Looping for items with type '.$sItemType.' !', 'raisemanager'));
-
-        foreach ($oCurrentQuery as $l => $aResultSet) {
-         $oCurrentObject = new $sItemType();
-         $oCurrentObject->getFromDB($aResultSet['id']);
-
-         if (isset($aAlreadyNotified[$aResultSet['id']])) {
-          continue;
-         }
-
-         if (NotificationEvent::raiseEvent('plugin_raisemanager', $oCurrentObject, array())) {
-          $aAlreadyNotified[$aResultSet['id']] = true;
-
-          $task->log(__($sItemType.'::'.$aResultSet['id'].' triggered !', 'raisemanager'));
-          $oRaiseLog = new PluginRaisemanagerRaiseLog();
-
-          $aData = array();
-          $aData['items_id'] = $aResultSet['id'];
-          $aData['levels_id'] = $iLevelID;
-          $aData['itemtype'] = $sItemType;
-          $aData['date_last_sent'] = date("Y-m-d H:i:s");
-          $oRaiseLog->add($aData);
-         }
+          $iLevelID = $aReferences[0];
+          $iLevelValue = $aReferences[1];
+          $sItemType = $aReferences[2];
+  
+          $task->log(__('Looping for items with type '.$sItemType.' !', 'raisemanager'));
+  
+          foreach ($oCurrentQuery as $l => $aResultSet) {
+           $oCurrentObject = new $sItemType();
+           $oCurrentObject->getFromDB($aResultSet['id']);
+  
+           if (isset($aAlreadyNotified[$aResultSet['id']])) {
+            $task->log($sItemType.' #'.$aResultSet['id'].' already notified, next');
+            continue;
+           }
+  
+           if (NotificationEvent::raiseEvent('plugin_raisemanager', $oCurrentObject, array())) {
+            $aAlreadyNotified[$aResultSet['id']] = true;
+  
+            $task->log($sItemType.'::'.$aResultSet['id'].' triggered !');
+            $oRaiseLog = new PluginRaisemanagerRaiseLog();
+            $oRaiseLog->deleteByCriteria(array('items_id' => $aResultSet['id'], 'itemtype' => $sItemType, 'levels_id' => $iLevelID));
+  
+            $aData = array();
+            $aData['items_id'] = $aResultSet['id'];
+            $aData['levels_id'] = $iLevelID;
+            $aData['level_value'] = $iLevelValue;
+            $aData['itemtype'] = $sItemType;
+            $aData['date_last_sent'] = date("Y-m-d H:i:s");
+            $oRaiseLog->add($aData);
+           }
         }
       }
 

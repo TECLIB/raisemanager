@@ -38,7 +38,7 @@ class PluginRaisemanagerRaiseLevel extends CommonDBTM {
    public $raisetemplates     = array();
 
    public static function getTypeName($nb = 0) {
-      return __("Raise level", "raisemanager");
+      return __("RaiseLevel", "raisemanager");
    }
 
    public static function canCreate() {
@@ -117,18 +117,18 @@ class PluginRaisemanagerRaiseLevel extends CommonDBTM {
       echo "<textarea name='comment' >".$this->fields["comment"]."</textarea>";
       echo "</td></tr>";
 
-      echo "<tr class='tab_bg_1'><td>".__('Is Multiple')."</td>";
+      echo "<tr class='tab_bg_1'><td>".__('Is Multiple', 'raisemanager')."</td>";
       echo "<td>";
 
       Dropdown::showYesNo('trigger_is_multiple', $this->fields["trigger_is_multiple"]);
 
       echo "</td></tr>";
 
-      echo "<tr><td>" . __('Send Value') . "</td>";
+      echo "<tr><td>" . __('Send Value', 'raisemanager') . "</td>";
       echo "<td><input type='text' name='send_value' value='".$this->fields["send_value"]."'>";
       echo "</td></tr>";
 
-      echo "<tr class='tab_bg_1'><td>".__('Send Type')."</td>";
+      echo "<tr class='tab_bg_1'><td>".__('Send Type', 'raisemanager')."</td>";
       echo "<td>";
 
       Dropdown::showFromArray('send_unit', $aDurationTypes, array(
@@ -138,11 +138,11 @@ class PluginRaisemanagerRaiseLevel extends CommonDBTM {
 
       echo "</td></tr>";
 
-      echo "<tr><td>" . __('Trigger Value') . "</td>";
+      echo "<tr><td>" . __('Trigger Value', 'raisemanager') . "</td>";
       echo "<td><input type='text' name='trigger_value' value='".$this->fields["trigger_value"]."'>";
       echo "</td></tr>";
 
-      echo "<tr class='tab_bg_1'><td>".__('Trigger Type')."</td>";
+      echo "<tr class='tab_bg_1'><td>".__('Trigger Type', 'raisemanager')."</td>";
       echo "<td>";
 
       Dropdown::showFromArray('trigger_unit', $aDurationTypes, array(

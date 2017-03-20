@@ -56,7 +56,7 @@ if (!isset($_GET["withtemplate"])) {
 }
 
 Html::header(
-   __("Raise Levels", "raisemanager"),
+   __("RaiseLevels", "raisemanager"),
    $_SERVER['PHP_SELF'],
    "config",
    "PluginRaiseManagerMenu",
@@ -64,6 +64,6 @@ Html::header(
 );
 
 
-$raiselevel->display($_GET['id']);
+$raiselevel->display(array('id' => $_GET['id']));
 
 Html::footer();
