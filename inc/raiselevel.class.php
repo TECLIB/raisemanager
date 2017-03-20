@@ -117,6 +117,13 @@ class PluginRaisemanagerRaiseLevel extends CommonDBTM {
       echo "<textarea name='comment' >".$this->fields["comment"]."</textarea>";
       echo "</td></tr>";
 
+      echo "<tr class='tab_bg_1'><td>".__('Notification')."</td>";
+      echo "<td>";
+
+      Notification::dropdown(array('value'      => $this->fields["notifications_id"],
+                               'emptylabel' => __('Choose a notification')));
+      echo "</td></tr>";
+
       echo "<tr class='tab_bg_1'><td>".__('Is Multiple', 'raisemanager')."</td>";
       echo "<td>";
 
@@ -168,6 +175,7 @@ class PluginRaisemanagerRaiseLevel extends CommonDBTM {
                     `name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
                     `entities_id` int(11) NOT NULL DEFAULT '0',
                     `is_recursive` tinyint(1) NOT NULL DEFAULT '0',
+                    `notifications_id` int(11) NOT NULL DEFAULT '0',
                     `send_total_value` int(11) NOT NULL DEFAULT '0',
                     `send_value` int(11) NOT NULL DEFAULT '1',
                     `send_unit` varchar(11) NOT NULL DEFAULT '0', 

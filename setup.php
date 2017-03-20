@@ -53,6 +53,7 @@ function plugin_init_raisemanager() {
       Plugin::registerClass('PluginRaisemanagerNotification');
       Plugin::registerClass('PluginRaisemanagerLog');
       Plugin::registerClass('PluginRaisemanagerCategoryTemplate');
+      Plugin::registerClass('PluginRaisemanagerNotificationEvent');
 
       $PLUGIN_HOOKS['item_get_events']['raisemanager'] = array(
          'NotificationTargetTicket' => 'plugin_raisemanager_add_events', 
