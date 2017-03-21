@@ -27,8 +27,8 @@
  */
 
 function plugin_raisemanager_getDropdown() {
-   return array('PluginRaisemanagerRaiseLevel'  =>  __('RaiseTemplate', 'raisemanager'),
-                'PluginRaisemanagerRaiseTemplate' =>  __('RaiseLevel', 'raisemanager'));
+   return array('PluginRaisemanagerRaiseTemplate'  =>  __('RaiseTemplate', 'raisemanager'),
+                'PluginRaisemanagerRaiseLevel' =>  __('RaiseLevel', 'raisemanager'));
 }
 
 /**
