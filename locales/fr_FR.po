@@ -30,6 +30,9 @@ msgstr "Installé / non configuré"
 msgid "Raises"
 msgstr "Relances"
 
+msgid "RaiseManager"
+msgstr "Plugin relances"
+
 #: front/menu.php:59
 msgid "RaiseTemplates"
 msgstr "Gabarits de relance"
