@@ -31,7 +31,7 @@ if (!defined('GLPI_ROOT')) {
    die("Sorry. You can't access directly to this file");
 }
 
-class PluginRaisemanagerRaiseTemplate extends CommonDBTM {
+class PluginRaisemanagerRaiseTemplate extends CommonDropdown {
    public $dohistory = true;
 
    // ITIL Categories linked to this template

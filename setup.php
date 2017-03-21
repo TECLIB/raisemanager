@@ -60,18 +60,6 @@ function plugin_init_raisemanager() {
          'NotificationTargetChange' => 'plugin_raisemanager_add_events',
          'NotificationTargetProblem' => 'plugin_raisemanager_add_prevents'
       );
-
-      if (Session::getLoginUserID()) {
-
-         if (Session::haveRight("config", UPDATE)) {
-            $PLUGIN_HOOKS['config_page']['raisemanager'] = 'front/config.form.php';
-         }
-
-         //if (PluginRaiseManagerRaiseTemplate::canView()) {
-            $PLUGIN_HOOKS['menu_toadd']['raisemanager'] = array('config' => 'PluginRaiseManagerMenu');
-         //}
-
-      }
    }
 
 }

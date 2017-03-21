@@ -26,6 +26,11 @@
  --------------------------------------------------------------------------
  */
 
+function plugin_raisemanager_getDropdown() {
+   return array('PluginRaisemanagerRaiseLevel'  =>  __('RaiseTemplate', 'raisemanager'),
+                'PluginRaisemanagerRaiseTemplate' =>  __('RaiseLevel', 'raisemanager'));
+}
+
 /**
  * Plugin install process
  *
@@ -54,5 +59,12 @@ function plugin_raisemanager_add_events(NotificationTargetCommonITILObject $targ
  * @return boolean
  */
 function plugin_raisemanager_uninstall() {
+   $migration = new Migration(PLUGIN_RAISEMANAGER_VERSION);
+   PluginRaisemanagerRaiseTemplate::uninstall($migration);
+   PluginRaisemanagerRaiseLevel::uninstall($migration);
+   PluginRaisemanagerRaiseLevelTemplate::uninstall($migration);
+   PluginRaisemanagerRaiseLog::uninstall($migration);
+   PluginRaisemanagerCategoryTemplate::uninstall($migration);
+
    return true;
 }
