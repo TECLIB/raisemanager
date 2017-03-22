@@ -28,10 +28,6 @@
 
 define('PLUGIN_RAISEMANAGER_VERSION', '0.0.1');
 
-foreach (glob(GLPI_ROOT . '/plugins/raisemanager/inc/*.php') as $file) {
-   include_once ($file);
-}
-
 /**
  * Init hooks of the plugin.
  * REQUIRED

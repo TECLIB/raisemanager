@@ -41,26 +41,6 @@ class PluginRaisemanagerRaiseLevel extends CommonDropdown {
       return __("RaiseLevel", "raisemanager");
    }
 
-   public static function canCreate() {
-      return true;
-   }
-
-   public static function canPurge() {
-      return true;
-   }
-
-   public static function canDelete() {
-      return true;
-   }
-
-   public static function canUpdate() {
-      return true;
-   }
-
-   public static function canView() {
-      return true;
-   }
-
    public function defineTabs($options=array()) {
       $ong = array();
       //add main tab for current object

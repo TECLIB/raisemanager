@@ -29,22 +29,7 @@
 
 include ("../../../inc/includes.php");
 
-Html::header(
-   __("Raises", "raisemanager"),
-   $_SERVER['PHP_SELF'],
-   "config",
-   "PluginRaiseManagerMenu",
-   "raisetemplate"
-);
+Plugin::load('raisemanager', true);
 
-$raisetemplate = new PluginRaisemanagerRaiseTemplate();
-
-if (PluginRaisemanagerRaiseTemplate::canView() || Session::haveRight("config", UPDATE)) {
-   Search::show("PluginRaisemanagerRaiseTemplate");
-} else {
-   echo "<div align='center'><br><br><img src=\""
-      . $CFG_GLPI["root_doc"] . "/pics/warning.png\" alt=\"warning\"><br><br>";
-   echo "<b>" . __("Access denied") . "</b></div>";
-}
-
-Html::footer();
+$dropdown = new PluginRaisemanagerRaiseTemplate();
+include (GLPI_ROOT . "/front/dropdown.common.php");

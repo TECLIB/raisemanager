@@ -29,22 +29,7 @@
 
 include ("../../../inc/includes.php");
 
-Html::header(
-   __("RaiseLevels", "raisemanager"),
-   $_SERVER['PHP_SELF'],
-   "config",
-   "PluginRaiseManagerMenu",
-   "raiselevel"
-);
+Plugin::load('raisemanager', true);
 
-$raiselevel = new PluginRaisemanagerRaiseLevel();
-
-if (PluginRaisemanagerRaiseLevel::canView() || Session::haveRight("config", UPDATE)) {
-   Search::show("PluginRaisemanagerRaiseLevel");
-} else {
-   echo "<div align='center'><br><br><img src=\""
-      . $CFG_GLPI["root_doc"] . "/pics/warning.png\" alt=\"warning\"><br><br>";
-   echo "<b>" . __("Access denied") . "</b></div>";
-}
-
-Html::footer();
+$dropdown = new PluginRaisemanagerRaiseLevel();
+include (GLPI_ROOT . "/front/dropdown.common.php");

@@ -46,26 +46,6 @@ class PluginRaisemanagerRaiseLevelTemplate extends CommonDBTM {
       return __s('Elements');
    }
 
-   public static function canCreate() {
-      return true;
-   }
-
-   public static function canPurge() {
-      return true;
-   }
-
-   public static function canDelete() {
-      return true;
-   }
-
-   public static function canUpdate() {
-      return true;
-   }
-
-   public static function canView() {
-      return true;
-   }
-
    static function countForItem($id) {
       return countElementsInTable(getTableForItemType(__CLASS__), "`templates_id`='$id'");
    }

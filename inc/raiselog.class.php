@@ -38,26 +38,6 @@ class PluginRaisemanagerRaiseLog extends CommonDBTM {
       return __("RaiseLogs", "raisemanager");
    }
 
-   public static function canCreate() {
-      return true;
-   }
-
-   public static function canPurge() {
-      return true;
-   }
-
-   public static function canDelete() {
-      return true;
-   }
-
-   public static function canUpdate() {
-      return true;
-   }
-
-   public static function canView() {
-      return true;
-   }
-
    public static function install(Migration $migration) {
       global $DB;
 

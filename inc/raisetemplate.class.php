@@ -32,6 +32,7 @@ if (!defined('GLPI_ROOT')) {
 }
 
 class PluginRaisemanagerRaiseTemplate extends CommonDropdown {
+
    public $dohistory = true;
 
    // ITIL Categories linked to this template
@@ -41,26 +42,6 @@ class PluginRaisemanagerRaiseTemplate extends CommonDropdown {
 
    public static function getTypeName($nb = 0) {
       return __("RaiseTemplate", "raisemanager");
-   }
-
-   public static function canCreate() {
-      return true;
-   }
-
-   public static function canPurge() {
-      return true;
-   }
-
-   public static function canDelete() {
-      return true;
-   }
-
-   public static function canUpdate() {
-      return true;
-   }
-
-   public static function canView() {
-      return true;
    }
 
    public function defineTabs($options=array()) {

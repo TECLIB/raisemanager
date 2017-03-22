@@ -43,26 +43,6 @@ class PluginRaisemanagerCategoryTemplate extends CommonDBTM {
       return __s('Elements');
    }
 
-   public static function canCreate() {
-      return true;
-   }
-
-   public static function canPurge() {
-      return true;
-   }
-
-   public static function canDelete() {
-      return true;
-   }
-
-   public static function canUpdate() {
-      return true;
-   }
-
-   public static function canView() {
-      return true;
-   }
-
    static function countForItem($field, $id) {
       return countElementsInTable(getTableForItemType(__CLASS__), "`$field`='$id'");
    }
