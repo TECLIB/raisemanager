@@ -126,8 +126,32 @@ class PluginRaisemanagerRaiseTemplate extends CommonDropdown {
       return true;
    }
 
-   public function storeItemTypes(&$data) {
-      $data['itemtypes'] = implode(', ', $data['itemtypes']);
+   /**
+    * @since version 0.83.3
+    *
+    * @see CommonDBTM::prepareInputForAdd()
+   **/
+   public function prepareInputForAdd($input) {
+
+      if (isset($input['itemtypes']) && is_array($input['itemtypes'])) {
+         $input['itemtypes'] = implode(', ', $input['itemtypes']);
+      }
+
+      return parent::prepareInputForAdd($input);
+   }
+
+   /**
+    * @since version 0.83.3
+    *
+    * @see CommonDBTM::prepareInputForUpdate()
+   **/
+   public function prepareInputForUpdate($input) {
+
+      if (isset($input['itemtypes']) && is_array($input['itemtypes'])) {
+         $input['itemtypes'] = implode(', ', $input['itemtypes']);
+      }
+
+      return parent::prepareInputForUpdate($input);
    }
 
    public static function install(Migration $migration) {

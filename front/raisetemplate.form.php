@@ -29,39 +29,7 @@
 
 include ("../../../inc/includes.php");
 
-$raisetemplate = new PluginRaisemanagerRaiseTemplate();
+Plugin::load('raisemanager', true);
 
-if (isset($_POST['add'])) {
-   $raisetemplate->add($_POST);
-   Html::back();
-}
-
-if (isset($_POST['update'])) {
-   $raisetemplate->storeItemTypes($_POST);
-   $raisetemplate->update($_POST);
-   Html::back();
-}
-
-if (isset($_POST['purge'])) {
-   $raisetemplate->delete($_POST);
-   $raisetemplate->redirectToList();
-}
-
-if (empty($_GET["id"])) {
-   $_GET["id"] = '';
-}
-if (!isset($_GET["withtemplate"])) {
-   $_GET["withtemplate"] = '';
-}
-
-Html::header(
-   __("Raises", "raisemanager"),
-   $_SERVER['PHP_SELF'],
-   "config",
-   "PluginRaiseManagerMenu",
-   "raisetemplate"
-);
-
-$raisetemplate->display(array('id' => $_GET['id']));
-
-Html::footer();
+$dropdown = new PluginRaisemanagerRaiseTemplate();
+include (GLPI_ROOT . "/front/dropdown.common.form.php");
