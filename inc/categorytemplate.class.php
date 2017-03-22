@@ -33,7 +33,9 @@ if (!defined('GLPI_ROOT')) {
 
 class PluginRaisemanagerCategorytemplate extends CommonDBTM {
 
-   static public $itemtype_1 = 'PluginRaisemanagerRaiseTemplate';
+   static $rightname = 'itilcategory';
+
+   static public $itemtype_1 = 'PluginRaisemanagerRaisetemplate';
    static public $items_id_1 = 'templates_id';
    static public $itemtype_2 = 'ITILCategory';
    static public $items_id_2 = 'itilcategories_id';
@@ -57,7 +59,7 @@ class PluginRaisemanagerCategorytemplate extends CommonDBTM {
       return self::$linkableClasses;
    }
 
-   static function showForTemplate(PluginRaisemanagerRaiseTemplate $template) {
+   static function showForTemplate(PluginRaisemanagerRaisetemplate $template) {
       global $DB, $LANG;
 
       if (!$template->canView()) {
@@ -78,7 +80,7 @@ class PluginRaisemanagerCategorytemplate extends CommonDBTM {
             $item->getFromDB($data['itilcategories_id']);
             echo "<tr>";
             echo "<td>";
-            if (PluginRaisemanagerRaiseTemplate::canUpdate()) {
+            if (PluginRaisemanagerRaisetemplate::canUpdate()) {
                echo "<input type='checkbox' name='todelete[".$data['id']."]'>";
             }
             echo "</td>";
@@ -89,7 +91,7 @@ class PluginRaisemanagerCategorytemplate extends CommonDBTM {
          }
       }
 
-      if (PluginRaisemanagerRaiseTemplate::canUpdate()) {
+      if (PluginRaisemanagerRaisetemplate::canUpdate()) {
          echo "<tr class='tab_bg_1'><td colspan='4' class='center'>";
 
             echo "<input type='hidden' name='templates_id' value='".$template->getID()."'>";
@@ -140,11 +142,11 @@ class PluginRaisemanagerCategorytemplate extends CommonDBTM {
          echo "<th>".__s('Itemtypes')."</th>";
          echo "</tr>";
          foreach ($results as $data) {
-            $tmp = new PluginRaisemanagerRaiseTemplate();
+            $tmp = new PluginRaisemanagerRaisetemplate();
             $tmp->getFromDB($data['templates_id']);
             echo "<tr>";
             echo "<td>";
-            if (PluginRaisemanagerRaiseTemplate::canDelete()) {
+            if (PluginRaisemanagerRaisetemplate::canDelete()) {
                echo "<input type='checkbox' name='todelete[".$data['id']."]'>";
             }
             echo "</td>";
@@ -161,18 +163,18 @@ class PluginRaisemanagerCategorytemplate extends CommonDBTM {
          }
       }
 
-      if (PluginRaisemanagerRaiseTemplate::canUpdate()) {
+      if (PluginRaisemanagerRaisetemplate::canUpdate()) {
          echo "<tr class='tab_bg_1'><td colspan='4' class='center'>";
          echo "<input type='hidden' name='itilcategories_id' value='".$item->getID()."'>";
          $used = array();
          $query = "SELECT `id`
-                   FROM `".getTableForItemType('PluginRaisemanagerRaiseTemplate')."`
+                   FROM `".getTableForItemType('PluginRaisemanagerRaisetemplate')."`
                    WHERE `id` IN (SELECT `templates_id`
                                    FROM `".getTableForItemType(__CLASS__)." AND itilcategories_id = '".$item->getID()."')";
          foreach ($DB->request($query) as $use) {
             $used[] = $use['id'];
          }
-         Dropdown::show('PluginRaisemanagerRaiseTemplate',
+         Dropdown::show('PluginRaisemanagerRaisetemplate',
                         array ('name' => "templates_id",
                                'entity' => $item->fields['entities_id'], 'used' => $used));
          echo "</td>";
@@ -193,16 +195,16 @@ class PluginRaisemanagerCategorytemplate extends CommonDBTM {
    public function getTabNameForItem(CommonGLPI $item, $withtemplate=0) {
       global $CFG_GLPI;
 
-      if (PluginRaisemanagerRaiseTemplate::canView()) {
+      if (PluginRaisemanagerRaisetemplate::canView()) {
          switch ($item->getType()) {
-            case 'PluginRaisemanagerRaiseTemplate' :
+            case 'PluginRaisemanagerRaisetemplate' :
                if ($_SESSION['glpishow_count_on_tabs']) {
                   return self::createTabEntry(ITILCategory::getTypeName(2), self::countForItem('templates_id', $item->GetID()));
                }
                return _n('Associated item', 'Associated items', 2);
             default :
                if ($_SESSION['glpishow_count_on_tabs']) {
-                  return self::createTabEntry(PluginRaisemanagerRaiseTemplate::getTypeName(2), self::countForItem('itilcategories_id', $item->GetID()));
+                  return self::createTabEntry(PluginRaisemanagerRaisetemplate::getTypeName(2), self::countForItem('itilcategories_id', $item->GetID()));
                }
                return _n('RaiseTemplate', 'Raise templates', 2);
          }
@@ -213,7 +215,7 @@ class PluginRaisemanagerCategorytemplate extends CommonDBTM {
    static function displayTabContentForItem(CommonGLPI $item, $tabnum=1, $withtemplate=0) {
       if (get_class($item) == 'ITILCategory') {
          self::showForItilCategory($item);
-      } else if (get_class($item) == 'PluginRaisemanagerRaiseTemplate') {
+      } else if (get_class($item) == 'PluginRaisemanagerRaisetemplate') {
          self::showForTemplate($item);
       }
       return true;

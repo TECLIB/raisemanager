@@ -40,21 +40,21 @@ class PluginRaisemanagerMenu extends CommonGLPI {
       $menu['title'] = self::getTypeName(2);
       $menu['page']  = self::getSearchURL(false);
 
-      if (PluginRaisemanagerRaiseTemplate::canView()) {
-         $menu['options']['raisetemplate']['title']                 = PluginRaisemanagerRaiseTemplate::getTypeName(2);
-         $menu['options']['raisetemplate']['page']                  = PluginRaisemanagerRaiseTemplate::getSearchURL(false);
-         $menu['options']['raisetemplate']['links']['search']       = PluginRaisemanagerRaiseTemplate::getSearchURL(false);
-         if (PluginRaisemanagerRaiseTemplate::canCreate()) {
-            $menu['options']['raisetemplate']['links']['add']       = PluginRaisemanagerRaiseTemplate::getFormURL(false);
+      if (PluginRaisemanagerRaisetemplate::canView()) {
+         $menu['options']['raisetemplate']['title']                 = PluginRaisemanagerRaisetemplate::getTypeName(2);
+         $menu['options']['raisetemplate']['page']                  = PluginRaisemanagerRaisetemplate::getSearchURL(false);
+         $menu['options']['raisetemplate']['links']['search']       = PluginRaisemanagerRaisetemplate::getSearchURL(false);
+         if (PluginRaisemanagerRaisetemplate::canCreate()) {
+            $menu['options']['raisetemplate']['links']['add']       = PluginRaisemanagerRaisetemplate::getFormURL(false);
          }
       }
 
-      if (PluginRaisemanagerRaiseLevel::canView()) {
-         $menu['options']['raiselevel']['title']                 = PluginRaisemanagerRaiseLevel::getTypeName(2);
-         $menu['options']['raiselevel']['page']                  = PluginRaisemanagerRaiseLevel::getSearchURL(false);
-         $menu['options']['raiselevel']['links']['search']       = PluginRaisemanagerRaiseLevel::getSearchURL(false);
-         if (PluginRaisemanagerRaiseLevel::canCreate()) {
-            $menu['options']['raiselevel']['links']['add']       = PluginRaisemanagerRaiseLevel::getFormURL(false);
+      if (PluginRaisemanagerRaiselevel::canView()) {
+         $menu['options']['raiselevel']['title']                 = PluginRaisemanagerRaiselevel::getTypeName(2);
+         $menu['options']['raiselevel']['page']                  = PluginRaisemanagerRaiselevel::getSearchURL(false);
+         $menu['options']['raiselevel']['links']['search']       = PluginRaisemanagerRaiselevel::getSearchURL(false);
+         if (PluginRaisemanagerRaiselevel::canCreate()) {
+            $menu['options']['raiselevel']['links']['add']       = PluginRaisemanagerRaiselevel::getFormURL(false);
          }
       }
 

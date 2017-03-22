@@ -79,8 +79,8 @@ function plugin_raisemanager_uninstall() {
  */
 function plugin_raisemanager_getDropdown() {
 
-   $pluginDropdowns = [ 'PluginRaisemanagerRaiseTemplate' => __('RaiseTemplate', 'raisemanager'),
-                        'PluginRaisemanagerRaiseLevel'    => __('RaiseLevel', 'raisemanager')];
+   $pluginDropdowns = [ 'PluginRaisemanagerRaisetemplate' => __('RaiseTemplate', 'raisemanager'),
+                        'PluginRaisemanagerRaiselevel'    => __('RaiseLevel', 'raisemanager')];
 
    return $pluginDropdowns;
 }

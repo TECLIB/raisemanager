@@ -31,7 +31,7 @@ class PluginRaisemanagerNotification extends CommonDBTM {
       $sRaiseTemplateQuery = '
       SELECT GROUP_CONCAT(DISTINCT tmplitilcat.itilcategories_id ORDER BY tmplitilcat.itilcategories_id DESC SEPARATOR \', \') AS itilcategories, tmpl.name, tmpl.itemtypes, lvl.id, lvl.name AS levelname, tmpl.entities_id, tmpl.is_recursive, lvl.send_value, lvl.send_total_value, lvl.send_unit, lvl.trigger_value, lvl.trigger_unit, lvl.trigger_is_multiple 
       FROM glpi_plugin_raisemanager_raiselevels AS lvl 
-      LEFT JOIN glpi_plugin_raisemanager_raiseleveltemplates AS lvltmpl ON lvltmpl.items_id = lvl.id AND itemtype = \'PluginRaisemanagerRaiseLevel\' 
+      LEFT JOIN glpi_plugin_raisemanager_raiseleveltemplates AS lvltmpl ON lvltmpl.items_id = lvl.id AND itemtype = \'PluginRaisemanagerRaiselevel\' 
       LEFT JOIN glpi_plugin_raisemanager_raisetemplates AS tmpl ON lvltmpl.templates_id = tmpl.id 
       LEFT JOIN glpi_plugin_raisemanager_categorytemplates AS tmplitilcat ON tmplitilcat.templates_id = tmpl.id 
       LEFT JOIN glpi_calendars AS cal ON tmpl.calendars_id = cal.id
@@ -63,7 +63,7 @@ class PluginRaisemanagerNotification extends CommonDBTM {
                   // Retrieve imtemtypes which passed minimum triggering time and has never been notified,
                   // or itemtypes which has been already notified but which last notify time is greater than frequency
                   $aQueries[$iCurrentLevelID.':'.$iCurrentLevelValue.':'.$sItemType] = 'SELECT T.id FROM '.getTableForItemType($sItemType).' AS T 
-                 LEFT JOIN '.getTableForItemType('PluginRaisemanagerRaiseLog').' AS log ON T.id = log.items_id AND log.itemtype = "'.$sItemType.'" AND log.levels_id = '.$iCurrentLevelID.' WHERE status < 5 AND due_date != "" AND ((log.items_id IS NULL AND NOW() > DATE_ADD(date, '.$sTriggerAfter.')) OR (NOW() > DATE_ADD(log.date_last_sent, '.$sRepeatAfter.') AND log.items_id IS NOT NULL)) '.getEntitiesRestrictRequest("AND", 'T', 'entities_id', $row['entities_id'], $row['is_recursive']).$sItilCategories;
+                 LEFT JOIN '.getTableForItemType('PluginRaisemanagerRaiselog').' AS log ON T.id = log.items_id AND log.itemtype = "'.$sItemType.'" AND log.levels_id = '.$iCurrentLevelID.' WHERE status < 5 AND due_date != "" AND ((log.items_id IS NULL AND NOW() > DATE_ADD(date, '.$sTriggerAfter.')) OR (NOW() > DATE_ADD(log.date_last_sent, '.$sRepeatAfter.') AND log.items_id IS NOT NULL)) '.getEntitiesRestrictRequest("AND", 'T', 'entities_id', $row['entities_id'], $row['is_recursive']).$sItilCategories;
                }
              break;
 
@@ -72,7 +72,7 @@ class PluginRaisemanagerNotification extends CommonDBTM {
                foreach ($aItemTypes as $k => $sItemType) {
                   // Retrieve itemtypes concerned and which hasn't been notified yet
                   $aQueries[$iCurrentLevelID.':'.$iCurrentLevelValue.':'.$sItemType] = 'SELECT T.id FROM '.getTableForItemType($sItemType).' AS T 
-                 LEFT JOIN '.getTableForItemType('PluginRaisemanagerRaiseLog').' AS log ON T.id = log.items_id AND log.itemtype = "'.$sItemType.'" AND levels_id = '.$iCurrentLevelID.' 
+                 LEFT JOIN '.getTableForItemType('PluginRaisemanagerRaiselog').' AS log ON T.id = log.items_id AND log.itemtype = "'.$sItemType.'" AND levels_id = '.$iCurrentLevelID.' 
                  WHERE log.items_id IS NULL AND status < 5 AND due_date != "" AND NOW() > DATE_ADD(date, '.$sTriggerAfter.') '.getEntitiesRestrictRequest("AND", 'T', 'entities_id', $row['entities_id'], $row['is_recursive']).$sItilCategories;
                }
              break;
@@ -100,7 +100,7 @@ class PluginRaisemanagerNotification extends CommonDBTM {
 
             // Check if current object has already been notified by greater raise level, if so, don't notify it
             $iSuperiorLevelsCheck = countElementsInTable(
-            getTableForItemType('PluginRaisemanagerRaiseLog'), 'itemtype = "'.$sItemType.'" 
+            getTableForItemType('PluginRaisemanagerRaiselog'), 'itemtype = "'.$sItemType.'" 
             AND items_id = '.$aResultSet['id'].' 
             AND level_value > '.$iLevelValue);
 
@@ -116,18 +116,18 @@ class PluginRaisemanagerNotification extends CommonDBTM {
             }
 
             // Retrieve raiselevel to pass notifications_id toe the raiseevent function
-            // raiseEvent function is ovveridden in PluginRaisemanagerNotificationEvent class
-            $oRaiseLevel = new PluginRaisemanagerRaiseLevel();
+            // raiseEvent function is ovveridden in PluginRaisemanagerNotificationevent class
+            $oRaiseLevel = new PluginRaisemanagerRaiselevel();
             $oRaiseLevel->getFromDB($iLevelID);
             $aOptions = array('notifications_id' => $oRaiseLevel->fields['notifications_id']);
 
-            if (PluginRaisemanagerNotificationEvent::raiseEvent('plugin_raisemanager', $oCurrentObject, $aOptions)) {
+            if (PluginRaisemanagerNotificationevent::raiseEvent('plugin_raisemanager', $oCurrentObject, $aOptions)) {
                $aAlreadyNotified[$aResultSet['id']] = true;
 
                $task->log($sItemType.'::'.$aResultSet['id'].' notified with Notification #'.$oRaiseLevel->fields['notifications_id']);
 
                // Delete previous history of notificaztion with this level
-               $oRaiseLog = new PluginRaisemanagerRaiseLog();
+               $oRaiseLog = new PluginRaisemanagerRaiselog();
                $oRaiseLog->deleteByCriteria(array('items_id' => $aResultSet['id'], 'itemtype' => $sItemType, 'levels_id' => $iLevelID));
 
                // Insert new entry in raise log history

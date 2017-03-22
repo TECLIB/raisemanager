@@ -31,14 +31,14 @@ if (!defined('GLPI_ROOT')) {
    die("Sorry. You can't access directly to this file");
 }
 
-class PluginRaisemanagerRaiseLevelTemplate extends CommonDBTM {
+class PluginRaisemanagerRaiseleveltemplate extends CommonDBTM {
 
-   static public $itemtype_1 = 'PluginRaisemanagerRaiseTemplate';
+   static public $itemtype_1 = 'PluginRaisemanagerRaisetemplate';
    static public $items_id_1 = 'templates_id';
    static public $itemtype_2 = 'itemtype';
    static public $items_id_2 = 'items_id';
 
-   static protected $linkableClasses = array('PluginRaisemanagerRaiseLevel');
+   static protected $linkableClasses = array('PluginRaisemanagerRaiselevel');
 
 
    static function getTypeName($nb=0) {
@@ -87,12 +87,12 @@ class PluginRaisemanagerRaiseLevelTemplate extends CommonDBTM {
    static function registerItemtype($itemtype) {
       if (!in_array($itemtype, self::$linkableClasses)) {
          array_push(self::$linkableClasses, $itemtype);
-         Plugin::registerClass('PluginRaisemanagerRaiseLevelTemplate',
+         Plugin::registerClass('PluginRaisemanagerRaiseleveltemplate',
                array('addtabon' => $itemtype));
       }
    }
 
-   static function showForTemplate(PluginRaisemanagerRaiseTemplate $template) {
+   static function showForTemplate(PluginRaisemanagerRaisetemplate $template) {
       global $DB, $LANG;
 
       if (!$template->canView()) {
@@ -114,7 +114,7 @@ class PluginRaisemanagerRaiseLevelTemplate extends CommonDBTM {
             $item->getFromDB($data['items_id']);
             echo "<tr>";
             echo "<td>";
-            if (PluginRaisemanagerRaiseTemplate::canUpdate()) {
+            if (PluginRaisemanagerRaisetemplate::canUpdate()) {
                echo "<input type='checkbox' name='todelete[".$data['id']."]'>";
             }
             echo "</td>";
@@ -128,7 +128,7 @@ class PluginRaisemanagerRaiseLevelTemplate extends CommonDBTM {
          }
       }
 
-      if (PluginRaisemanagerRaiseTemplate::canUpdate()) {
+      if (PluginRaisemanagerRaisetemplate::canUpdate()) {
          echo "<tr class='tab_bg_1'><td colspan='4' class='center'>";
          if (empty($results)) {
             echo "<input type='hidden' name='templates_id' value='".$template->getID()."'>";
@@ -170,11 +170,11 @@ class PluginRaisemanagerRaiseLevelTemplate extends CommonDBTM {
          echo "<th>".__s('Itemtypes')."</th>";
          echo "</tr>";
          foreach ($results as $data) {
-            $tmp = new PluginRaisemanagerRaiseTemplate();
+            $tmp = new PluginRaisemanagerRaisetemplate();
             $tmp->getFromDB($data['templates_id']);
             echo "<tr>";
             echo "<td>";
-            if (PluginRaisemanagerRaiseTemplate::canDelete()) {
+            if (PluginRaisemanagerRaisetemplate::canDelete()) {
                echo "<input type='checkbox' name='todelete[".$data['id']."]'>";
             }
             echo "</td>";
@@ -191,19 +191,19 @@ class PluginRaisemanagerRaiseLevelTemplate extends CommonDBTM {
          }
       }
 
-      if (PluginRaisemanagerRaiseTemplate::canUpdate()) {
+      if (PluginRaisemanagerRaisetemplate::canUpdate()) {
          echo "<tr class='tab_bg_1'><td colspan='4' class='center'>";
          echo "<input type='hidden' name='items_id' value='".$item->getID()."'>";
          echo "<input type='hidden' name='itemtype' value='".$item->getType()."'>";
          $used = array();
          $query = "SELECT `id`
-                   FROM `".getTableForItemType('PluginRaisemanagerRaiseTemplate')."`
+                   FROM `".getTableForItemType('PluginRaisemanagerRaisetemplate')."`
                    WHERE `id` IN (SELECT `templates_id`
                                    FROM `".getTableForItemType(__CLASS__)."` AND itemtype = '".$item->getType()."' AND items_id = '".$item->getID()."')";
          foreach ($DB->request($query) as $use) {
             $used[] = $use['id'];
          }
-         Dropdown::show('PluginRaisemanagerRaiseTemplate',
+         Dropdown::show('PluginRaisemanagerRaisetemplate',
                         array ('name' => "templates_id",
                                'entity' => $item->fields['entities_id'], 'used' => $used));
          echo "</td>";
@@ -224,16 +224,16 @@ class PluginRaisemanagerRaiseLevelTemplate extends CommonDBTM {
    public function getTabNameForItem(CommonGLPI $item, $withtemplate=0) {
       global $CFG_GLPI;
 
-      if (PluginRaisemanagerRaiseTemplate::canView()) {
+      if (PluginRaisemanagerRaisetemplate::canView()) {
          switch ($item->getType()) {
-            case 'PluginRaisemanagerRaiseTemplate' :
+            case 'PluginRaisemanagerRaisetemplate' :
                if ($_SESSION['glpishow_count_on_tabs']) {
                   return self::createTabEntry(_n('Associated item', 'Associated items', 2), self::countForTemplate($item));
                }
                return _n('Associated item', 'Associated items', 2);
             default :
                if ($_SESSION['glpishow_count_on_tabs']) {
-                  return self::createTabEntry(PluginRaisemanagerRaiseTemplate::getTypeName(2), self::countForItemByItemtype($item));
+                  return self::createTabEntry(PluginRaisemanagerRaisetemplate::getTypeName(2), self::countForItemByItemtype($item));
                }
                return _n('RaiseTemplate', 'Raise templates', 2);
          }
@@ -247,7 +247,7 @@ class PluginRaisemanagerRaiseLevelTemplate extends CommonDBTM {
     *
     * @param $item   RaiseTemplate object
     **/
-   static function countForTemplate(PluginRaisemanagerRaiseTemplate $item) {
+   static function countForTemplate(PluginRaisemanagerRaisetemplate $item) {
 
       $restrict = "`".getTableForItemType(__CLASS__)."`.`templates_id` = '".$item->getField('id')."'";
 
@@ -256,9 +256,9 @@ class PluginRaisemanagerRaiseLevelTemplate extends CommonDBTM {
 
 
    static function displayTabContentForItem(CommonGLPI $item, $tabnum=1, $withtemplate=0) {
-      if (in_array(get_class($item), PluginRaisemanagerRaiseLevelTemplate::getClasses())) {
+      if (in_array(get_class($item), PluginRaisemanagerRaiseleveltemplate::getClasses())) {
          self::showForItem($item);
-      } else if (get_class($item) == 'PluginRaisemanagerRaiseTemplate') {
+      } else if (get_class($item) == 'PluginRaisemanagerRaisetemplate') {
          self::showForTemplate($item);
       }
       return true;

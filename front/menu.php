@@ -36,33 +36,33 @@ Html::header(
    "PluginRaisemanagerMenu"
 );
 
-$PluginRaisemanagerRaiseTemplate     = new PluginRaisemanagerRaiseTemplate();
-$PluginRaisemanagerRaiseLevel = new PluginRaisemanagerRaiseLevel();
+$PluginRaisemanagerRaisetemplate     = new PluginRaisemanagerRaisetemplate();
+$PluginRaisemanagerRaiselevel = new PluginRaisemanagerRaiselevel();
 
 //If there's only one possibility, do not display menu!
-if (PluginRaisemanagerRaiseTemplate::canView() && !PluginRaisemanagerRaiseLevel::canView()) {
-   Html::redirect(Toolbox::getItemTypeSearchURL('PluginRaisemanagerRaiseTemplate'));
+if (PluginRaisemanagerRaisetemplate::canView() && !PluginRaisemanagerRaiselevel::canView()) {
+   Html::redirect(Toolbox::getItemTypeSearchURL('PluginRaisemanagerRaisetemplate'));
 
-} else if (!PluginRaisemanagerRaiseTemplate::canView() && PluginRaisemanagerRaiseLevel::canView()) {
-   Html::redirect(Toolbox::getItemTypeSearchURL('PluginRaisemanagerRaiseLevel'));
+} else if (!PluginRaisemanagerRaisetemplate::canView() && PluginRaisemanagerRaiselevel::canView()) {
+   Html::redirect(Toolbox::getItemTypeSearchURL('PluginRaisemanagerRaiselevel'));
 }
 
-if (PluginRaisemanagerRaiseTemplate::canView() || PluginRaisemanagerRaiseLevel::canView()) {
+if (PluginRaisemanagerRaisetemplate::canView() || PluginRaisemanagerRaiselevel::canView()) {
    echo "<div class='center'>";
    echo "<table class='tab_cadre'>";
    echo "<tr><th colspan='2'>" . __("Raises", "raisemanager") . "</th></tr>";
 
-   if (PluginRaisemanagerRaiseTemplate::canView()) {
+   if (PluginRaisemanagerRaisetemplate::canView()) {
       echo "<tr class='tab_bg_1' align='center'>";
       //echo "<td><img src='../pics/order-icon.png'></td>";
-      echo "<td><a href='".Toolbox::getItemTypeSearchURL('PluginRaisemanagerRaiseTemplate')."'>" .
+      echo "<td><a href='".Toolbox::getItemTypeSearchURL('PluginRaisemanagerRaisetemplate')."'>" .
          __("RaiseTemplates", "raisemanager") . "</a></td></tr>";
    }
 
-   if (PluginRaisemanagerRaiseLevel::canView()) {
+   if (PluginRaisemanagerRaiselevel::canView()) {
       echo "<tr class='tab_bg_1' align='center'>";
       //echo "<td><img src='../pics/reference-icon.png'></td>";
-      echo "<td><a href='".Toolbox::getItemTypeSearchURL('PluginRaisemanagerRaiseLevel')."'>" .
+      echo "<td><a href='".Toolbox::getItemTypeSearchURL('PluginRaisemanagerRaiselevel')."'>" .
          __("RaiseLevels", "raisemanager") . "</a></td></tr>";
    }
 

@@ -31,7 +31,7 @@ if (!defined('GLPI_ROOT')) {
    die("Sorry. You can't access directly to this file");
 }
 
-class PluginRaisemanagerRaiseLevel extends CommonDropdown {
+class PluginRaisemanagerRaiselevel extends CommonDropdown {
    public $dohistory = true;
 
    // Templates of this level
@@ -47,7 +47,7 @@ class PluginRaisemanagerRaiseLevel extends CommonDropdown {
       $this->addDefaultFormTab($ong, $options);
 
       if ($this->fields['id'] > 0) {
-         $this->addStandardTab('PluginRaisemanagerRaiseLevelTemplate', $ong, $options);
+         $this->addStandardTab('PluginRaisemanagerRaiseleveltemplate', $ong, $options);
       }
       $this->addStandardTab('Log', $ong, $options);
 

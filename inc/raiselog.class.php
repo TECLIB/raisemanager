@@ -31,7 +31,7 @@ if (!defined('GLPI_ROOT')) {
    die("Sorry. You can't access directly to this file");
 }
 
-class PluginRaisemanagerRaiseLog extends CommonDBTM {
+class PluginRaisemanagerRaiselog extends CommonDBTM {
    public $dohistory = true;
 
    public static function getTypeName($nb = 0) {

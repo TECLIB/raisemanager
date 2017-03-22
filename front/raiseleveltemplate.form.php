@@ -29,13 +29,13 @@
 
 include ("../../../inc/includes.php");
 
-$raiseleveltemplate = new PluginRaisemanagerRaiseLevelTemplate();
+$raiseleveltemplate = new PluginRaisemanagerRaiseleveltemplate();
 
-if (isset($_POST["additem"]) && PluginRaisemanagerRaiseLevelTemplate::canCreate()) {
+if (isset($_POST["additem"]) && PluginRaisemanagerRaiseleveltemplate::canCreate()) {
    $newID = $raiseleveltemplate->add($_POST);
 }
 
-if (isset($_POST["delete_items"]) && PluginRaisemanagerRaiseLevelTemplate::canDelete()) {
+if (isset($_POST["delete_items"]) && PluginRaisemanagerRaiseleveltemplate::canDelete()) {
    if (isset($_POST['todelete'])) {
       foreach ($_POST['todelete'] as $id => $val) {
          if ($val == 'on') {

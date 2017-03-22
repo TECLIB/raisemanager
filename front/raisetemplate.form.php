@@ -31,5 +31,5 @@ include ("../../../inc/includes.php");
 
 Plugin::load('raisemanager', true);
 
-$dropdown = new PluginRaisemanagerRaiseTemplate();
+$dropdown = new PluginRaisemanagerRaisetemplate();
 include (GLPI_ROOT . "/front/dropdown.common.form.php");

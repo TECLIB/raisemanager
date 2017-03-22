@@ -7,7 +7,7 @@ if (!defined('GLPI_ROOT')) {
 /**
  * Class which manages notification events
 **/
-class PluginRaisemanagerNotificationEvent extends NotificationEvent {
+class PluginRaisemanagerNotificationevent extends NotificationEvent {
 
    /**
     * Raise a notification event event
