@@ -29,7 +29,20 @@
 
 include ("../../../inc/includes.php");
 
-Plugin::load('raisemanager', true);
+$raiseleveltemplate = new PluginRaisemanagerRaiseLevelTemplate();
 
-$dropdown = new PluginRaisemanagerRaiseLevel();
-include (GLPI_ROOT . "/front/dropdown.common.form.php");
+if (isset($_POST["additem"]) && PluginRaisemanagerRaiseLevelTemplate::canCreate()) {
+   $newID = $raiseleveltemplate->add($_POST);
+}
+
+if (isset($_POST["delete_items"]) && PluginRaisemanagerRaiseLevelTemplate::canDelete()) {
+   if (isset($_POST['todelete'])) {
+      foreach ($_POST['todelete'] as $id => $val) {
+         if ($val == 'on') {
+            $ok = $raiseleveltemplate->delete(array('id' => $id));
+         }
+      }
+   }
+}
+
+Html::back();
