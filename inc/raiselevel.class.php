@@ -32,6 +32,7 @@ if (!defined('GLPI_ROOT')) {
 }
 
 class PluginRaisemanagerRaiselevel extends CommonDropdown {
+
    public $dohistory = true;
 
    // Templates of this level

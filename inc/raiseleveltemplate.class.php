@@ -33,6 +33,8 @@ if (!defined('GLPI_ROOT')) {
 
 class PluginRaisemanagerRaiseleveltemplate extends CommonDBTM {
 
+   static $rightname = 'dropdown';
+
    static public $itemtype_1 = 'PluginRaisemanagerRaisetemplate';
    static public $items_id_1 = 'templates_id';
    static public $itemtype_2 = 'itemtype';
@@ -40,10 +42,8 @@ class PluginRaisemanagerRaiseleveltemplate extends CommonDBTM {
 
    static protected $linkableClasses = array('PluginRaisemanagerRaiselevel');
 
-
-   static function getTypeName($nb=0) {
-      global $LANG;
-      return __s('Elements');
+   public static function getTypeName($nb = 0) {
+      return _n('RaiseLevel', 'RaiseLevels', $nb, 'raisemanager');
    }
 
    static function countForItem($id) {
@@ -228,12 +228,13 @@ class PluginRaisemanagerRaiseleveltemplate extends CommonDBTM {
          switch ($item->getType()) {
             case 'PluginRaisemanagerRaisetemplate' :
                if ($_SESSION['glpishow_count_on_tabs']) {
-                  return self::createTabEntry(_n('Associated item', 'Associated items', 2), self::countForTemplate($item));
+                  return self::createTabEntry(self::getTypeName(2), self::countForTemplate($item));
                }
-               return _n('Associated item', 'Associated items', 2);
+               return self::getTypeName(2);
             default :
                if ($_SESSION['glpishow_count_on_tabs']) {
-                  return self::createTabEntry(PluginRaisemanagerRaisetemplate::getTypeName(2), self::countForItemByItemtype($item));
+                  return self::createTabEntry(PluginRaisemanagerRaisetemplate::getTypeName(2), 
+                                                self::countForItemByItemtype($item));
                }
                return _n('RaiseTemplate', 'Raise templates', 2);
          }

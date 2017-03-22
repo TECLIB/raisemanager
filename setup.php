@@ -42,6 +42,10 @@ function plugin_init_raisemanager() {
    $plugin = new Plugin();
    if ($plugin->isInstalled("raisemanager") && $plugin->isActivated("raisemanager")) {
 
+      Plugin::registerClass('PluginRaisemanagerCategorytemplate');
+      Plugin::registerClass('PluginRaisemanagerRaisetemplate');
+      Plugin::registerClass('PluginRaisemanagerRaiselevel');
+
       $PLUGIN_HOOKS['item_get_events']['raisemanager'] = [
          'NotificationTargetTicket'    => 'plugin_raisemanager_add_events',
          'NotificationTargetChange'    => 'plugin_raisemanager_add_events',

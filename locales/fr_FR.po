@@ -39,8 +39,10 @@ msgstr "Gabarits de relance"
 
 #: front/menu.php:66 front/raiselevel.form.php:59 front/raiselevel.php:33
 #: inc/raiseleveltemplate.class.php:126
-msgid "RaiseLevels"
-msgstr "Niveaux de relance"
+msgid "RaiseLevel"
+msgid_plural "RaiseLevels"
+msgstr[0] "Niveau de relance"
+msgstr[1] "Niveaux de relance"
 
 #: inc/notification.inc.php:14
 msgid "RaiseNotification"
@@ -49,10 +51,6 @@ msgstr "Relances automatiques"
 #: inc/notification.inc.php:84
 msgid "Looping for items with type "
 msgstr "Itération sur les objets de type "
-
-#: inc/raiselevel.class.php:41 inc/raiselevel.class.php:88
-msgid "RaiseLevel"
-msgstr "Niveau de relance"
 
 #: inc/raiselevel.class.php:120
 msgid "Is Multiple"

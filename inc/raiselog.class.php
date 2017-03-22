@@ -32,6 +32,9 @@ if (!defined('GLPI_ROOT')) {
 }
 
 class PluginRaisemanagerRaiselog extends CommonDBTM {
+
+   static $rightname = 'dropdown';
+
    public $dohistory = true;
 
    public static function getTypeName($nb = 0) {
