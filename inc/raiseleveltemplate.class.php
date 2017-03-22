@@ -233,7 +233,7 @@ class PluginRaisemanagerRaiseleveltemplate extends CommonDBTM {
                return self::getTypeName(2);
             default :
                if ($_SESSION['glpishow_count_on_tabs']) {
-                  return self::createTabEntry(PluginRaisemanagerRaisetemplate::getTypeName(2), 
+                  return self::createTabEntry(PluginRaisemanagerRaisetemplate::getTypeName(2),
                                                 self::countForItemByItemtype($item));
                }
                return _n('RaiseTemplate', 'Raise templates', 2);
