@@ -144,4 +144,16 @@ class PluginRaisemanagerNotification extends CommonDBTM {
 
       return $cron_status;
    }
+
+   /**
+    * Install all necessary table for the plugin
+    *
+    * @return boolean True if success
+    */
+   static function install(Migration $migration) {
+
+      CronTask::Register('PluginRaisemanagerNotification',
+                         'SendRaises',
+                         MINUTE_TIMESTAMP);
+   }
 }

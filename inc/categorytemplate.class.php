@@ -31,7 +31,7 @@ if (!defined('GLPI_ROOT')) {
    die("Sorry. You can't access directly to this file");
 }
 
-class PluginRaisemanagerCategoryTemplate extends CommonDBTM {
+class PluginRaisemanagerCategorytemplate extends CommonDBTM {
 
    static public $itemtype_1 = 'PluginRaisemanagerRaiseTemplate';
    static public $items_id_1 = 'templates_id';
@@ -219,29 +219,42 @@ class PluginRaisemanagerCategoryTemplate extends CommonDBTM {
       return true;
    }
 
-   public static function install(Migration $migration) {
+   /**
+    * Install all necessary table for the plugin
+    *
+    * @return boolean True if success
+    */
+   static function install(Migration $migration) {
       global $DB;
 
       $table = getTableForItemType(__CLASS__);
+
       if (!TableExists($table)) {
          $migration->displayMessage("Installing $table");
-         $query ="CREATE TABLE IF NOT EXISTS `".getTableForItemType(__CLASS__)."` (
-		              `id` int(11) NOT NULL AUTO_INCREMENT,
-		              `itilcategories_id` int(11) NOT NULL DEFAULT '0',
-		              `templates_id` int(11) NOT NULL DEFAULT '0',
-		              PRIMARY KEY (`id`),
-		              KEY `templates_id` (`templates_id`),
-		              KEY `itilcategories_id` (`itilcategories_id`)
+
+         $query ="CREATE TABLE IF NOT EXISTS `$table` (
+                    `id` int(11) NOT NULL AUTO_INCREMENT,
+                    `itilcategories_id` int(11) NOT NULL DEFAULT '0',
+                    `templates_id` int(11) NOT NULL DEFAULT '0',
+                    PRIMARY KEY (`id`),
+                    KEY `templates_id` (`templates_id`),
+                    KEY `itilcategories_id` (`itilcategories_id`)
                   ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ;";
          $DB->query($query) or die ($DB->error());
       }
-
-      return true;
    }
 
-   public static function uninstall() {
-      global $DB;
+   /**
+    * Uninstall previously installed table of the plugin
+    *
+    * @return boolean True if success
+    */
+   static function uninstall(Migration $migration) {
 
-      $DB->query("DROP TABLE IF EXISTS `" . getTableForItemType(__CLASS__) . "`") or die ($DB->error());
+      $table = getTableForItemType(__CLASS__);
+
+      $migration->displayMessage("Uninstalling $table");
+
+      $migration->dropTable($table);
    }
 }

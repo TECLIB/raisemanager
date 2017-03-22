@@ -38,13 +38,20 @@ class PluginRaisemanagerRaiseLog extends CommonDBTM {
       return __("RaiseLogs", "raisemanager");
    }
 
-   public static function install(Migration $migration) {
+   /**
+    * Install all necessary table for the plugin
+    *
+    * @return boolean True if success
+    */
+   static function install(Migration $migration) {
       global $DB;
 
       $table = getTableForItemType(__CLASS__);
+
       if (!TableExists($table)) {
          $migration->displayMessage("Installing $table");
-         $query ="CREATE TABLE IF NOT EXISTS `".getTableForItemType(__CLASS__)."` (
+
+         $query ="CREATE TABLE IF NOT EXISTS `$table` (
                     `id` int(11) NOT NULL AUTO_INCREMENT,
                     `items_id` int(11) NOT NULL DEFAULT '0' COMMENT 'RELATION to various table, according to itemtype (id)',
                     `levels_id` int(11) NOT NULL DEFAULT '0',
@@ -57,13 +64,19 @@ class PluginRaisemanagerRaiseLog extends CommonDBTM {
                   ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ;";
          $DB->query($query) or die ($DB->error());
       }
-
-      return true;
    }
 
-   public static function uninstall() {
-      global $DB;
+   /**
+    * Uninstall previously installed table of the plugin
+    *
+    * @return boolean True if success
+    */
+   static function uninstall(Migration $migration) {
 
-      $DB->query("DROP TABLE IF EXISTS `" . getTableForItemType(__CLASS__) . "`") or die ($DB->error());
+      $table = getTableForItemType(__CLASS__);
+
+      $migration->displayMessage("Uninstalling $table");
+
+      $migration->dropTable($table);
    }
 }

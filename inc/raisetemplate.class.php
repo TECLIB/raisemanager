@@ -50,7 +50,7 @@ class PluginRaisemanagerRaiseTemplate extends CommonDropdown {
       $this->addDefaultFormTab($ong);
 
       if ($this->fields['id'] > 0) {
-         $this->addStandardTab('PluginRaisemanagerCategoryTemplate', $ong, $options);
+         $this->addStandardTab('PluginRaisemanagerCategorytemplate', $ong, $options);
          $this->addStandardTab('PluginRaisemanagerRaiseLevelTemplate', $ong, $options);
       }
       $this->addStandardTab('Log', $ong, $options);
@@ -154,13 +154,20 @@ class PluginRaisemanagerRaiseTemplate extends CommonDropdown {
       return parent::prepareInputForUpdate($input);
    }
 
-   public static function install(Migration $migration) {
+   /**
+    * Install all necessary table for the plugin
+    *
+    * @return boolean True if success
+    */
+   static function install(Migration $migration) {
       global $DB;
 
       $table = getTableForItemType(__CLASS__);
+
       if (!TableExists($table)) {
          $migration->displayMessage("Installing $table");
-         $query ="CREATE TABLE IF NOT EXISTS `".getTableForItemType(__CLASS__)."` (
+
+         $query ="CREATE TABLE IF NOT EXISTS `$table` (
                     `id` int(11) NOT NULL AUTO_INCREMENT,
                     `name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
                     `entities_id` int(11) NOT NULL DEFAULT '0',
@@ -176,13 +183,19 @@ class PluginRaisemanagerRaiseTemplate extends CommonDropdown {
                   ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ;";
          $DB->query($query) or die ($DB->error());
       }
-
-      return true;
    }
 
-   public static function uninstall() {
-      global $DB;
+   /**
+    * Uninstall previously installed table of the plugin
+    *
+    * @return boolean True if success
+    */
+   static function uninstall(Migration $migration) {
 
-      $DB->query("DROP TABLE IF EXISTS `" . getTableForItemType(__CLASS__) . "`") or die ($DB->error());
+      $table = getTableForItemType(__CLASS__);
+
+      $migration->displayMessage("Uninstalling $table");
+
+      $migration->dropTable($table);
    }
 }

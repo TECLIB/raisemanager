@@ -29,13 +29,13 @@
 
 include ("../../../inc/includes.php");
 
-$raisecategorytemplate = new PluginRaisemanagerCategoryTemplate();
+$raisecategorytemplate = new PluginRaisemanagerCategorytemplate();
 
-if (isset($_POST["additem"]) && PluginRaisemanagerCategoryTemplate::canCreate()) {
+if (isset($_POST["additem"]) && PluginRaisemanagerCategorytemplate::canCreate()) {
    $newID = $raisecategorytemplate->add($_POST);
 }
 
-if (isset($_POST["delete_items"]) && PluginRaisemanagerCategoryTemplate::canDelete()) {
+if (isset($_POST["delete_items"]) && PluginRaisemanagerCategorytemplate::canDelete()) {
    if (isset($_POST['todelete'])) {
       foreach ($_POST['todelete'] as $id => $val) {
          if ($val == 'on') {

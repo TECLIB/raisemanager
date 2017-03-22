@@ -42,20 +42,11 @@ function plugin_init_raisemanager() {
    $plugin = new Plugin();
    if ($plugin->isInstalled("raisemanager") && $plugin->isActivated("raisemanager")) {
 
-      Plugin::registerClass('PluginRaisemanagerRaiseTemplate');
-      Plugin::registerClass('PluginRaisemanagerRaiseLevel');
-      Plugin::registerClass('PluginRaisemanagerRaiseLevelTemplate');
-      Plugin::registerClass('PluginRaisemanagerMenu');
-      Plugin::registerClass('PluginRaisemanagerNotification');
-      Plugin::registerClass('PluginRaisemanagerLog');
-      Plugin::registerClass('PluginRaisemanagerCategoryTemplate');
-      Plugin::registerClass('PluginRaisemanagerNotificationEvent');
-
-      $PLUGIN_HOOKS['item_get_events']['raisemanager'] = array(
-         'NotificationTargetTicket' => 'plugin_raisemanager_add_events',
-         'NotificationTargetChange' => 'plugin_raisemanager_add_events',
-         'NotificationTargetProblem' => 'plugin_raisemanager_add_prevents'
-      );
+      $PLUGIN_HOOKS['item_get_events']['raisemanager'] = [
+         'NotificationTargetTicket'    => 'plugin_raisemanager_add_events',
+         'NotificationTargetChange'    => 'plugin_raisemanager_add_events',
+         'NotificationTargetProblem'   => 'plugin_raisemanager_add_events'
+      ];
    }
 
 }

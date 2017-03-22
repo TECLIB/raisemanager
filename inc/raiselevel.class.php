@@ -54,11 +54,6 @@ class PluginRaisemanagerRaiseLevel extends CommonDropdown {
       return $ong;
    }
 
-   public function computeTotalValue(&$data) {
-      $aDurationValues = array('SECOND' => 1, 'MINUTE' => 60, 'DAY' => 86400, 'WEEK' => 604800, 'MONTH' => 2628001, 'YEAR' => 31536014);
-      $data['send_total_value'] = round($data['send_value'] * $aDurationValues[$data['send_unit']]);
-   }
-
    /**
     * Définition du nom de l'onglet
    **/
@@ -144,13 +139,67 @@ class PluginRaisemanagerRaiseLevel extends CommonDropdown {
       return true;
    }
 
-   public static function install(Migration $migration) {
+   /**
+    * @since version 0.83.3
+    *
+    * @see CommonDBTM::prepareInputForAdd()
+   **/
+   public function prepareInputForAdd($input) {
+
+      if (isset($input['send_value']) && isset($input['send_unit'])) {
+         $input['send_total_value'] = $this->computeTotalValue($input);
+      }
+
+      return parent::prepareInputForAdd($input);
+   }
+
+   /**
+    * @since version 0.83.3
+    *
+    * @see CommonDBTM::prepareInputForUpdate()
+   **/
+   public function prepareInputForUpdate($input) {
+
+      if (isset($input['send_value']) && isset($input['send_unit'])) {
+         $input['send_total_value'] = $this->computeTotalValue($input);
+      }
+
+      return parent::prepareInputForUpdate($input);
+   }
+
+   /**
+    * Compute total value to store in DB 'send_total_value'.
+    *
+    * @param $data array From $_POST input (send_value) and (send_unit)
+    *
+    * @return integer
+   **/
+   public function computeTotalValue($data) {
+
+      $aDurationValues = ['SECOND' => 1,
+                          'MINUTE' => 60,
+                          'DAY'    => 86400,
+                          'WEEK'   => 604800,
+                          'MONTH'  => 2628001,
+                          'YEAR'   => 31536014];
+
+      return round($data['send_value'] * $aDurationValues[$data['send_unit']]);
+   }
+
+   /**
+    * Install all necessary table for the plugin
+    *
+    * @return boolean True if success
+    */
+   static function install(Migration $migration) {
       global $DB;
 
       $table = getTableForItemType(__CLASS__);
+
       if (!TableExists($table)) {
          $migration->displayMessage("Installing $table");
-         $query ="CREATE TABLE IF NOT EXISTS `".getTableForItemType(__CLASS__)."` (
+
+         $query ="CREATE TABLE IF NOT EXISTS `$table` (
                     `id` int(11) NOT NULL AUTO_INCREMENT,
                     `name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
                     `entities_id` int(11) NOT NULL DEFAULT '0',
@@ -170,13 +219,19 @@ class PluginRaisemanagerRaiseLevel extends CommonDropdown {
                   ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci ;";
          $DB->query($query) or die ($DB->error());
       }
-
-      return true;
    }
 
-   public static function uninstall() {
-      global $DB;
+   /**
+    * Uninstall previously installed table of the plugin
+    *
+    * @return boolean True if success
+    */
+   static function uninstall(Migration $migration) {
 
-      $DB->query("DROP TABLE IF EXISTS `" . getTableForItemType(__CLASS__) . "`") or die ($DB->error());
+      $table = getTableForItemType(__CLASS__);
+
+      $migration->displayMessage("Uninstalling $table");
+
+      $migration->dropTable($table);
    }
 }

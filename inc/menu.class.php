@@ -60,7 +60,4 @@ class PluginRaisemanagerMenu extends CommonGLPI {
 
       return $menu;
    }
-
-   function install() {
-   }
 }
