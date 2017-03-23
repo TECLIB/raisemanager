@@ -225,7 +225,7 @@ class PluginRaisemanagerCategorytemplate extends CommonDBTM {
          case 'ITILCategory':
             self::showForItilCategory($item);
             break;
-         
+
          case 'PluginRaisemanagerRaisetemplate':
             self::showForTemplate($item);
             break;
