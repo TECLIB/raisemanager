@@ -41,7 +41,7 @@ class PluginRaisemanagerRaisetemplate extends CommonDropdown {
    public $raiselevels     = array();
 
    public static function getTypeName($nb = 0) {
-      return __("RaiseTemplate", "raisemanager");
+      return _n('Raise template', 'Raise templates', $nb, 'raisemanager');
    }
 
    public function defineTabs($options=array()) {
@@ -59,15 +59,16 @@ class PluginRaisemanagerRaisetemplate extends CommonDropdown {
    }
 
    /**
-    * Définition du nom de l'onglet
+    * @see CommonGLPI::getTabNameForItem()
    **/
    function getTabNameForItem(CommonGLPI $item, $withtemplate=0) {
-      switch ($item::getType()) {
-         case __CLASS__:
-            return __('RaiseTemplate', 'raisemanager');
-            break;
+
+      if ($_SESSION['glpishow_count_on_tabs']) {
+         return self::createTabEntry(self::getTypeName(2),
+                                     self::countForItem($item));
+      } else {
+         return self::getTypeName(2);
       }
-      return '';
    }
 
    /**

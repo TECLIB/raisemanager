@@ -27,22 +27,22 @@
  @since     2009
  ---------------------------------------------------------------------- */
 
-include ("../../../inc/includes.php");
+include ('../../../inc/includes.php');
 
-$raiseleveltemplate = new PluginRaisemanagerRaiseleveltemplate();
+Session::haveRightsOr("dropdown", [CREATE, UPDATE, DELETE, PURGE]);
 
-if (isset($_POST["additem"]) && PluginRaisemanagerRaiseleveltemplate::canCreate()) {
-   $newID = $raiseleveltemplate->add($_POST);
-}
+$PluginRaisemanagerRaiseleveltemplate = new PluginRaisemanagerRaiseleveltemplate();
 
-if (isset($_POST["delete_items"]) && PluginRaisemanagerRaiseleveltemplate::canDelete()) {
-   if (isset($_POST['todelete'])) {
-      foreach ($_POST['todelete'] as $id => $val) {
-         if ($val == 'on') {
-            $ok = $raiseleveltemplate->delete(array('id' => $id));
-         }
-      }
+if (isset($_POST["add"])) {
+
+   $PluginRaisemanagerRaiseleveltemplate->check(-1, CREATE, $_POST);
+   if ($PluginRaisemanagerRaiseleveltemplate->add($_POST)) {
+      Session::addMessageAfterRedirect(__('Operation successful'));
+   } else {
+      Session::addMessageAfterRedirect(__('Failed operation'), false, ERROR);
    }
+   Html::back();
+
 }
 
-Html::back();
+Html::displayErrorAndDie("lost");

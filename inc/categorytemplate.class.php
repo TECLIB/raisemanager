@@ -41,8 +41,7 @@ class PluginRaisemanagerCategorytemplate extends CommonDBTM {
    static public $items_id_2 = 'itilcategories_id';
 
    static function getTypeName($nb=0) {
-      global $LANG;
-      return __s('Elements');
+      return ITILCategory::getTypeName($nb);
    }
 
    static function countForItem($field, $id) {
@@ -70,7 +69,7 @@ class PluginRaisemanagerCategorytemplate extends CommonDBTM {
       echo "<div class='spaced'>";
       echo "<form id='items' name='items' method='post' action='".Toolbox::getItemTypeFormURL(__CLASS__)."'>";
       echo "<table class='tab_cadre_fixehov'>";
-      echo "<tr><th colspan='6'>".__("ITIL Categories")."</th></tr>";
+      echo "<tr><th colspan='6'>".self::getTypeName(2)."</th></tr>";
       if (!empty($results)) {
          echo "<tr><th></th>";
          echo "<th colspan='4'>".__s("Name")."</th>";
@@ -192,6 +191,9 @@ class PluginRaisemanagerCategorytemplate extends CommonDBTM {
       echo "</div>";
    }
 
+   /**
+    * @see CommonGLPI::getTabNameForItem()
+   **/
    public function getTabNameForItem(CommonGLPI $item, $withtemplate=0) {
       global $CFG_GLPI;
 
@@ -199,24 +201,34 @@ class PluginRaisemanagerCategorytemplate extends CommonDBTM {
          switch ($item->getType()) {
             case 'PluginRaisemanagerRaisetemplate' :
                if ($_SESSION['glpishow_count_on_tabs']) {
-                  return self::createTabEntry(ITILCategory::getTypeName(2), self::countForItem('templates_id', $item->GetID()));
+                  return self::createTabEntry(self::getTypeName(2),
+                                              self::countForItem('templates_id', $item->GetID()));
                }
-               return _n('Associated item', 'Associated items', 2);
+               return self::getTypeName(2);
             default :
                if ($_SESSION['glpishow_count_on_tabs']) {
-                  return self::createTabEntry(PluginRaisemanagerRaisetemplate::getTypeName(2), self::countForItem('itilcategories_id', $item->GetID()));
+                  return self::createTabEntry(PluginRaisemanagerRaisetemplate::getTypeName(2),
+                                              self::countForItem('itilcategories_id', $item->GetID()));
                }
-               return _n('RaiseTemplate', 'Raise templates', 2);
+               return PluginRaisemanagerRaisetemplate::getTypeName(2);
          }
       }
       return '';
    }
 
+   /**
+    * @see CommonGLPI::displayTabContentForItem()
+   **/
    static function displayTabContentForItem(CommonGLPI $item, $tabnum=1, $withtemplate=0) {
-      if (get_class($item) == 'ITILCategory') {
-         self::showForItilCategory($item);
-      } else if (get_class($item) == 'PluginRaisemanagerRaisetemplate') {
-         self::showForTemplate($item);
+
+      switch ($item->getType()) {
+         case 'ITILCategory':
+            self::showForItilCategory($item);
+            break;
+         
+         case 'PluginRaisemanagerRaisetemplate':
+            self::showForTemplate($item);
+            break;
       }
       return true;
    }

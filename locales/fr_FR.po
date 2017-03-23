@@ -17,69 +17,98 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: hook.php:48
-msgid "RaiseEvent"
-msgstr "Envoi de relances"
-
-#: setup.php:128
-msgid "Installed / not configured"
-msgstr "Installé / non configuré"
-
-#: front/menu.php:33 front/menu.php:53 front/raisetemplate.form.php:58
-#: front/raisetemplate.php:33 inc/menu.class.php:33
+#: front/menu.php:33 front/menu.php:53 inc/menu.class.php:33
 msgid "Raises"
 msgstr "Relances"
-
-msgid "RaiseManager"
-msgstr "Plugin relances"
 
 #: front/menu.php:59
 msgid "RaiseTemplates"
 msgstr "Gabarits de relance"
 
-#: front/menu.php:66 front/raiselevel.form.php:59 front/raiselevel.php:33
-#: inc/raiseleveltemplate.class.php:126
-msgid "RaiseLevel"
-msgid_plural "RaiseLevels"
-msgstr[0] "Niveau de relance"
-msgstr[1] "Niveaux de relance"
+#: front/menu.php:66
+msgid "RaiseLevels"
+msgstr "Niveaux de relance"
 
-#: inc/notification.inc.php:14
-msgid "RaiseNotification"
-msgstr "Relances automatiques"
-
-#: inc/notification.inc.php:84
-msgid "Looping for items with type "
-msgstr "Itération sur les objets de type "
-
-#: inc/raiselevel.class.php:120
-msgid "Is Multiple"
-msgstr "Envoi multiple ?"
-
-#: inc/raiselevel.class.php:127
-msgid "Send Value"
-msgstr "Déclenchement après (valeur)"
-
-#: inc/raiselevel.class.php:131
-msgid "Send Type"
-msgstr "Déclenchement après (unités)"
-
-#: inc/raiselevel.class.php:141
-msgid "Trigger Value"
-msgstr "Relance tous les (valeur)"
-
-#: inc/raiselevel.class.php:145
-msgid "Trigger Type"
-msgstr "Relance tous les (unités)"
-
-#: inc/raiselog.class.php:38
+#: inc/raiselog.class.php:41
 msgid "RaiseLogs"
 msgstr "Historique de relance"
 
-#: inc/raisetemplate.class.php:43 inc/raisetemplate.class.php:86
-msgid "RaiseTemplate"
-msgstr "Gabarit de relance"
+#: inc/notification.class.php:14
+msgid "RaiseNotification"
+msgstr "Relances automatiques"
 
-#: inc/raisetemplate.class.php:124
+#: inc/notification.class.php:95
+msgid "Looping for items with type "
+msgstr "Itération sur les objets de type "
+
+#: inc/raiseleveltemplate.class.php:236 inc/raiselevel.class.php:119
+msgid "Is Multiple"
+msgstr "Envoi multiple ?"
+
+#: inc/raiseleveltemplate.class.php:237
+msgid "Send after"
+msgstr "Déclenchement après"
+
+#: inc/raiseleveltemplate.class.php:238
+msgid "Trigger"
+msgstr "Relance tous les"
+
+#: inc/raiseleveltemplate.class.php:289
+msgid "No level was linked"
+msgstr "Aucun niveau de relance lié"
+
+#: inc/raiseleveltemplate.class.php:300
+msgid "Add a level"
+msgstr "Lier à un niveau de relance"
+
+#: inc/raiseleveltemplate.class.php:371 inc/raisetemplate.class.php:106
 msgid "Subtypes"
 msgstr "Types de tickets concernés"
+
+#: inc/raiseleveltemplate.class.php:412
+msgid "No template was linked"
+msgstr "Aucun gabarit de relance lié"
+
+#: inc/raiseleveltemplate.class.php:423
+msgid "Add a template"
+msgstr "Lier à un gabarit de relance"
+
+#: inc/raisetemplate.class.php:44 hook.php:82
+msgid "Raise template"
+msgid_plural "Raise templates"
+msgstr[0] "Gabarit de relance"
+msgstr[1] "Gabarits de relance"
+
+#: inc/raiselevel.class.php:42 hook.php:86
+msgid "Raise level"
+msgid_plural "Raise levels"
+msgstr[0] "Niveau de relance"
+msgstr[1] "Niveaux de relance"
+
+#: inc/raiselevel.class.php:64
+msgid "RaiseLevel"
+msgstr "Niveau de relance"
+
+#: inc/raiselevel.class.php:126
+msgid "Send Value"
+msgstr "Déclenchement après (valeur)"
+
+#: inc/raiselevel.class.php:130
+msgid "Send Type"
+msgstr "Déclenchement après (unités)"
+
+#: inc/raiselevel.class.php:140
+msgid "Trigger Value"
+msgstr "Relance tous les (valeur)"
+
+#: inc/raiselevel.class.php:144
+msgid "Trigger Type"
+msgstr "Relance tous les (unités)"
+
+#: setup.php:108
+msgid "Installed / not configured"
+msgstr "Installé / non configuré"
+
+#: hook.php:100
+msgid "Raise event"
+msgstr "Envoi de relances"

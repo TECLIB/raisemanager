@@ -39,7 +39,7 @@ class PluginRaisemanagerRaiselevel extends CommonDropdown {
    public $raisetemplates     = array();
 
    public static function getTypeName($nb = 0) {
-      return __("RaiseLevel", "raisemanager");
+      return _n('Raise level', 'Raise levels', $nb, 'raisemanager');
    }
 
    public function defineTabs($options=array()) {
@@ -67,6 +67,22 @@ class PluginRaisemanagerRaiselevel extends CommonDropdown {
       return '';
    }
 
+   static function getDurationType($duration='') {
+
+      $aDurationTypes = ['SECOND' => 'Secondes',
+                         'MINUTE' => 'Minutes',
+                         'DAY'    => 'Jours',
+                         'WEEK'   => 'Semaines',
+                         'MONTH'  => 'Mois',
+                         'YEAR'   => 'Années'];
+
+      if (!empty($duration)) {
+         return $aDurationTypes[$duration];
+      } else {
+         return $aDurationTypes;
+      }
+   }
+
    /**
     * Show form
     *
@@ -81,7 +97,7 @@ class PluginRaisemanagerRaiselevel extends CommonDropdown {
       $this->getFromDB($ID);
       $this->showFormHeader($options);
 
-      $aDurationTypes = array('SECOND' => 'Secondes', 'MINUTE' => 'Minutes', 'DAY' => 'Jours', 'WEEK' => 'Semaines', 'MONTH' => 'Mois', 'YEAR' => 'Années');
+      $aDurationTypes = self::getDurationType();
 
       echo "<tr class='tab_bg_1'>";
       echo "<td>".__('Name')."</td>";

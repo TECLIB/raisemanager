@@ -35,32 +35,69 @@ class PluginRaisemanagerRaiseleveltemplate extends CommonDBTM {
 
    static $rightname = 'dropdown';
 
-   static public $itemtype_1 = 'PluginRaisemanagerRaisetemplate';
-   static public $items_id_1 = 'templates_id';
-   static public $itemtype_2 = 'itemtype';
-   static public $items_id_2 = 'items_id';
+   /**
+    * @see CommonGLPI::getTabNameForItem()
+   **/
+   function getTabNameForItem(CommonGLPI $item, $withtemplate=0) {
 
-   static protected $linkableClasses = array('PluginRaisemanagerRaiselevel');
+      switch ($item->getType()) {
+         case 'PluginRaisemanagerRaisetemplate' :
+            if ($_SESSION['glpishow_count_on_tabs']) {
+               return self::createTabEntry(PluginRaisemanagerRaiselevel::getTypeName(2),
+                                           self::countForTemplate($item));
+            } else {
+               return PluginRaisemanagerRaiselevel::getTypeName(2);
+            }
+            break;
+         case 'PluginRaisemanagerRaiselevel' :
+            if ($_SESSION['glpishow_count_on_tabs']) {
+               return self::createTabEntry(PluginRaisemanagerRaisetemplate::getTypeName(2),
+                                           self::countForLevel($item));
+            } else {
+               return PluginRaisemanagerRaisetemplate::getTypeName(2);
+            }
+            break;
+      }
 
-   public static function getTypeName($nb = 0) {
-      return _n('RaiseLevel', 'RaiseLevels', $nb, 'raisemanager');
-   }
-
-   static function countForItem($id) {
-      return countElementsInTable(getTableForItemType(__CLASS__), "`templates_id`='$id'");
+      return '';
    }
 
    /**
-    * Count the number of relations having the itemtype of $item
-    *
-    * @param CommonDBTM $item Item whose relations to raisetemplates shall be counted
-    * @return integer count of relations between the item and raisetemplates
-    */
-   static function countForItemByItemtype(CommonDBTM $item) {
-      $id = $item->getField('id');
-      $itemtype = $item->getType();
+    * @see CommonGLPI::displayTabContentForItem()
+   **/
+   static function displayTabContentForItem(CommonGLPI $item, $tabnum=1, $withtemplate=0) {
 
-      return countElementsInTable(getTableForItemType(__CLASS__), "`items_id`='$id' AND `itemtype`='$itemtype'");
+      switch ($item->getType()) {
+         case 'PluginRaisemanagerRaisetemplate' :
+            self::showForTemplate($item);
+            break;
+         case 'PluginRaisemanagerRaiselevel' :
+            self::showForLevel($item);
+            break;
+      }
+      return true;
+   }
+
+   /**
+    *
+    * Count the number of associated items for a raisetemplate item
+    *
+    * @param $item   RaiseTemplate object
+    **/
+   static function countForTemplate(PluginRaisemanagerRaisetemplate $item) {
+      return countElementsInTable(getTableForItemType(__CLASS__),
+                                    "`templates_id` = '".$item->getID()."'");
+   }
+
+   /**
+    *
+    * Count the number of associated items for a raiselevel item
+    *
+    * @param $item   PluginRaisemanagerRaiselevel object
+    **/
+   static function countForLevel(PluginRaisemanagerRaiselevel $item) {
+      return countElementsInTable(getTableForItemType(__CLASS__),
+                                    "`items_id` = '".$item->getID()."'");
    }
 
    /**
@@ -77,192 +114,327 @@ class PluginRaisemanagerRaiseleveltemplate extends CommonDBTM {
       $oObj->deleteByCriteria($aCriteria);
    }
 
-   static function getClasses() {
-      return self::$linkableClasses;
+   /**
+    * Get all levels for a raisetemplate
+    *
+    * @param $ID           integer     raisetemplate ID
+    * @param $start        integer     first line to retrieve (default 0)
+    * @param $limit        integer     max number of line to retrive (0 for all) (default 0)
+    * @param $sqlfilter    string      to add an SQL filter (default '')
+    * @return array of levels
+   **/
+   static function getAllForTemplate($ID, $start=0, $limit=0, $sqlfilter='') {
+      global $DB;
+
+      $query = "SELECT *
+                FROM `" . getTableForItemType(__CLASS__) . "`
+                WHERE `templates_id` = '$ID'";
+      if ($sqlfilter) {
+         $query .= "AND ($sqlfilter) ";
+      }
+      $query .= "ORDER BY `id` DESC";
+
+      if ($limit) {
+         $query .= " LIMIT ".intval($start)."," . intval($limit);
+      }
+
+      $raisetemplates = array();
+      foreach ($DB->request($query) as $data) {
+         $raisetemplates[$data['id']] = $data;
+      }
+
+      return $raisetemplates;
    }
 
    /**
-    * Declare a new itemtype to be linkable to a raise template
-    */
-   static function registerItemtype($itemtype) {
-      if (!in_array($itemtype, self::$linkableClasses)) {
-         array_push(self::$linkableClasses, $itemtype);
-         Plugin::registerClass('PluginRaisemanagerRaiseleveltemplate',
-               array('addtabon' => $itemtype));
+    * Get all templates for a raiselevel
+    *
+    * @param $ID           integer     raiselevel ID
+    * @param $start        integer     first line to retrieve (default 0)
+    * @param $limit        integer     max number of line to retrive (0 for all) (default 0)
+    * @param $sqlfilter    string      to add an SQL filter (default '')
+    * @return array of levels
+   **/
+   static function getAllForLevel($ID, $start=0, $limit=0, $sqlfilter='') {
+      global $DB;
+
+      $query = "SELECT *
+                FROM `" . getTableForItemType(__CLASS__) . "`
+                WHERE `items_id` = '$ID'";
+      if ($sqlfilter) {
+         $query .= "AND ($sqlfilter) ";
       }
+      $query .= "ORDER BY `id` DESC";
+
+      if ($limit) {
+         $query .= " LIMIT ".intval($start)."," . intval($limit);
+      }
+
+      $raiselevels = array();
+      foreach ($DB->request($query) as $data) {
+         $raiselevels[$data['id']] = $data;
+      }
+
+      return $raiselevels;
    }
 
+   /**
+    * Show levels attached for a RaiseTemplate
+    *
+    * @param $template PluginRaisemanagerRaisetemplate object
+   **/
    static function showForTemplate(PluginRaisemanagerRaisetemplate $template) {
-      global $DB, $LANG;
+      global $DB, $CFG_GLPI;
 
-      if (!$template->canView()) {
+      $ID = $template->getField('id');
+      if (!$template->can($ID, READ)) {
          return false;
       }
-      $results = getAllDatasFromTable(getTableForItemType(__CLASS__),
-                                     "`templates_id` = '".$template->getID()."'");
-      echo "<div class='spaced'>";
-      echo "<form id='items' name='items' method='post' action='".Toolbox::getItemTypeFormURL(__CLASS__)."'>";
-      echo "<table class='tab_cadre_fixehov'>";
-      echo "<tr><th colspan='6'>".__("RaiseLevels", 'raisemanager')."</th></tr>";
-      if (!empty($results)) {
-         echo "<tr><th></th>";
-         echo "<th>".__s("Type")."</th>";
-         echo "<th>".__s("Name")."</th>";
-         echo "</tr>";
-         foreach ($results as $data) {
+
+      $canedit = $template->canEdit($ID);
+      $number  = self::countForTemplate($template);
+      $used    = array();
+
+      $out = "";
+      $out .= "<div class='spaced'>";
+      $out .= "<table class='tab_cadre_fixe'>";
+      $out .= "<tr class='tab_bg_1'><th colspan='2'>";
+      $out .= PluginRaisemanagerRaiselevel::getTypeName(2);
+      $out .= "</th></tr></table></div>";
+      $out .= "<div class='spaced'>";
+
+      if ($number) {
+
+         if ($canedit) {
+            $rand = mt_rand();
+            echo $out; $out = "";
+            Html::openMassiveActionsForm('mass'.__CLASS__.$rand);
+            $massiveactionparams
+               = array('num_displayed'
+                         => $number,
+                       'container'
+                         => 'mass'.__CLASS__.$rand,
+                       'rand' => $rand,
+                       'specific_actions'
+                         => array('purge' => _x('button', 'Delete permanently')));
+            Html::showMassiveActions($massiveactionparams);
+         }
+
+         $out .= "<table class='tab_cadre_fixehov'>";
+         $header_begin  = "<tr>";
+         $header_top    = '';
+         $header_bottom = '';
+         $header_end    = '';
+         if ($canedit) {
+            $header_begin  .= "<th width='10'>";
+            $header_top    .= Html::getCheckAllAsCheckbox('mass'.__CLASS__.$rand);
+            $header_bottom .= Html::getCheckAllAsCheckbox('mass'.__CLASS__.$rand);
+            $header_end    .= "</th>";
+         }
+         $header_end .= "<th>".__('Name')."</th>";
+         $header_end .= "<th>".__('Notification')."</th>";
+         $header_end .= "<th>".__('Is Multiple', 'raisemanager')."</th>";
+         $header_end .= "<th>".__('Send after', 'raisemanager')."</th>";
+         $header_end .= "<th>".__('Trigger', 'raisemanager')."</th>";
+         $header_end .= "</tr>\n";
+         $out.= $header_begin.$header_top.$header_end;
+
+         foreach (self::getAllForTemplate($ID) as $data) {
+
+            $used[] = $data['items_id'];
+
+            $out .= "<tr class='tab_bg_2'>";
+            if ($canedit) {
+               $out .= "<td width='10'>";
+               echo $out; $out = "";
+               Html::showMassiveActionCheckBox(__CLASS__, $data["id"]);
+               $out .= "</td>";
+            }
+
             $item = new $data['itemtype'];
             $item->getFromDB($data['items_id']);
-            echo "<tr>";
-            echo "<td>";
-            if (PluginRaisemanagerRaisetemplate::canUpdate()) {
-               echo "<input type='checkbox' name='todelete[".$data['id']."]'>";
-            }
-            echo "</td>";
-            echo "<td>";
-            echo call_user_func(array($data['itemtype'], 'getTypeName'));
-            echo "</td>";
-            echo "<td>";
-            echo $item->getLink();
-            echo "</td>";
-            echo "</tr>";
-         }
-      }
 
-      if (PluginRaisemanagerRaisetemplate::canUpdate()) {
-         echo "<tr class='tab_bg_1'><td colspan='4' class='center'>";
-         if (empty($results)) {
-            echo "<input type='hidden' name='templates_id' value='".$template->getID()."'>";
-            // TODO : Dropdown::showAllItems is deprecated, use Dropdown::showSelectItemFromItemtypes instead
-            Dropdown::showAllItems("items_id", 0, 0, $template->fields['entities_id'], self::getClasses());
-            echo "</td>";
-            echo "<td colspan='2' class='center' class='tab_bg_2'>";
-            echo "<input type='submit' name='additem' value=\""._sx('button', 'Add')."\" class='submit'>";
-            echo "</td></tr>";
+            $out .= "<td width='40%' class='center'>";
+            $out .= $item->getLink();
+            $out .= "</td>";
+            $out .= "<td class='center'>";
+            $out .= Dropdown::getDropdownName(getTableForItemType('Notification'),
+                                 $item->getField('notifications_id'));
+            $out .= "</td>";
+            $out .= "<td class='center'>";
+            $out .= ($item->getField('trigger_is_multiple')) ? __('Yes') : __('No');
+            $out .= "</td>";
+            $out .= "<td class='center'>";
+            $out .= $item->getField('send_value');
+            $out .= " ";
+            $out .= $item->getDurationType($item->getField('send_unit'));
+            $out .= "</td>";
+            $out .= "<td class='center'>";
+            $out .= $item->getField('trigger_value');
+            $out .= " ";
+            $out .= $item->getDurationType($item->getField('trigger_unit'));
+            $out .= "</td></tr>";
          }
 
-         if (!empty($results)) {
-            Html::openArrowMassives('items', true);
-            Html::closeArrowMassives(array('delete_items' => _sx('button', 'Disconnect')));
+         $out .= $header_begin.$header_bottom.$header_end;
+         $out .= "</table>\n";
+
+         if ($canedit) {
+            $massiveactionparams['ontop'] = false;
+            echo $out; $out = "";
+            Html::showMassiveActions($massiveactionparams);
+            Html::closeForm();
          }
+      } else {
+         $out .= "<p class='center b'>".__('No level was linked', 'raisemanager')."</p>";
       }
-      echo "</table>";
-      Html::closeForm();
-      echo "</div>";
+      $out .= "</div>\n";
+
+      if ($canedit) {
+         $rand = mt_rand();
+         $out .= "<div class='firstbloc'>";
+         $out .= "<form name='raiseleveltemplate_form$rand' id='raiseleveltemplate_form$rand' method='post' action='";
+         $out .= Toolbox::getItemTypeFormURL(__CLASS__)."'>";
+         $out .= "<table class='tab_cadre_fixe'>";
+         $out .= "<tr class='tab_bg_1'>";
+         $out .= "<th>" . __('Add a level', 'raisemanager') . "</th>";
+         $out .= "<th><input type='hidden' name='templates_id' value='$ID'>";
+         $out .= "<input type='hidden' name='itemtype' value='PluginRaisemanagerRaiselevel'>";
+         echo $out; $out = "";
+         PluginRaisemanagerRaiselevel::dropdown(['name' => 'items_id',
+                                                 'used' => $used]);
+         $out .= "</th><th class='tab_bg_2 right'>";
+         $out .= "<input type='submit' name='add' value=\""._sx('button', 'Add')."\" class='submit'>";
+         $out .= "</th></tr>";
+         $out .= "</table>";
+         echo $out; $out = "";
+         Html::closeForm();
+         $out .= "</div>";
+      }
+      echo $out;
    }
+   /**
+    * Show templates attached for a RaiseLevel
+    *
+    * @param $level PluginRaisemanagerRaiselevel object
+   **/
+   static function showForLevel(PluginRaisemanagerRaiselevel $level) {
+      global $DB, $CFG_GLPI;
 
-   static function showForItem(CommonDBTM $item) {
-      global $DB, $LANG;
-
-      if (!$item->canView()) {
+      $ID = $level->getField('id');
+      if (!$level->can($ID, READ)) {
          return false;
       }
 
-      $results = getAllDatasFromTable(getTableForItemType(__CLASS__),
-                                     "`items_id` = '".$item->getID()."' AND `itemtype`='".get_class($item)."'");
-      echo "<div class='spaced'>";
-      echo "<form id='items' name='items' method='post' action='".Toolbox::getItemTypeFormURL(__CLASS__)."'>";
-      echo "<table class='tab_cadre_fixehov'>";
-      echo "<tr><th colspan='6'>".__s('Associated item')."</th></tr>";
-      if (!empty($results)) {
-         echo "<tr><th></th>";
-         echo "<th>".__s('Entity')."</th>";
-         echo "<th>".__s('Name')."</th>";
-         echo "<th>".__s('Itemtypes')."</th>";
-         echo "</tr>";
-         foreach ($results as $data) {
-            $tmp = new PluginRaisemanagerRaisetemplate();
-            $tmp->getFromDB($data['templates_id']);
-            echo "<tr>";
-            echo "<td>";
-            if (PluginRaisemanagerRaisetemplate::canDelete()) {
-               echo "<input type='checkbox' name='todelete[".$data['id']."]'>";
+      $canedit = $level->canEdit($ID);
+      $number  = self::countForLevel($level);
+      $used    = array();
+
+      $out = "";
+      $out .= "<div class='spaced'>";
+      $out .= "<table class='tab_cadre_fixe'>";
+      $out .= "<tr class='tab_bg_1'><th colspan='2'>";
+      $out .= PluginRaisemanagerRaisetemplate::getTypeName(2);
+      $out .= "</th></tr></table></div>";
+      $out .= "<div class='spaced'>";
+
+      if ($number) {
+
+         if ($canedit) {
+            $rand = mt_rand();
+            echo $out; $out = "";
+            Html::openMassiveActionsForm('mass'.__CLASS__.$rand);
+            $massiveactionparams
+               = array('num_displayed'
+                         => $number,
+                       'container'
+                         => 'mass'.__CLASS__.$rand,
+                       'rand' => $rand,
+                       'specific_actions'
+                         => array('purge' => _x('button', 'Delete permanently')));
+            Html::showMassiveActions($massiveactionparams);
+         }
+
+         $out .= "<table class='tab_cadre_fixehov'>";
+         $header_begin  = "<tr>";
+         $header_top    = '';
+         $header_bottom = '';
+         $header_end    = '';
+         if ($canedit) {
+            $header_begin  .= "<th width='10'>";
+            $header_top    .= Html::getCheckAllAsCheckbox('mass'.__CLASS__.$rand);
+            $header_bottom .= Html::getCheckAllAsCheckbox('mass'.__CLASS__.$rand);
+            $header_end    .= "</th>";
+         }
+         $header_end .= "<th>".__('Name')."</th>";
+         $header_end .= "<th>".__('Calendar')."</th>";
+         $header_end .= "<th>".__('Subtypes', 'raisemanager')."</th>";
+         $header_end .= "</tr>\n";
+         $out.= $header_begin.$header_top.$header_end;
+
+         foreach (self::getAllForLevel($ID) as $data) {
+
+            $used[] = $data['templates_id'];
+
+            $out .= "<tr class='tab_bg_2'>";
+            if ($canedit) {
+               $out .= "<td width='10'>";
+               echo $out; $out = "";
+               Html::showMassiveActionCheckBox(__CLASS__, $data["id"]);
+               $out .= "</td>";
             }
-            echo "</td>";
-            echo "<td>";
-            echo Dropdown::getDropdownName('glpi_entities', $tmp->fields['entities_id']);
-            echo "</td>";
-            echo "<td>";
-            echo $tmp->getLink();
-            echo "</td>";
-            echo "<td>";
-            echo $tmp->fields['itemtypes'];
-            echo "</td>";
-            echo "</tr>";
+
+            $item = new PluginRaisemanagerRaisetemplate();
+            $item->getFromDB($data['templates_id']);
+
+            $out .= "<td width='40%' class='center'>";
+            $out .= $item->getLink();
+            $out .= "</td>";
+            $out .= "<td class='center'>";
+            $out .= Dropdown::getDropdownName(getTableForItemType('Calendar'),
+                                                $item->getField('calendars_id'));
+            $out .= "</td>";
+            $out .= "<td class='center'>";
+            $out .= $item->getField('itemtypes');
+            $out .= "</td></tr>";
          }
-      }
 
-      if (PluginRaisemanagerRaisetemplate::canUpdate()) {
-         echo "<tr class='tab_bg_1'><td colspan='4' class='center'>";
-         echo "<input type='hidden' name='items_id' value='".$item->getID()."'>";
-         echo "<input type='hidden' name='itemtype' value='".$item->getType()."'>";
-         $used = array();
-         $query = "SELECT `id`
-                   FROM `".getTableForItemType('PluginRaisemanagerRaisetemplate')."`
-                   WHERE `id` IN (SELECT `templates_id`
-                                   FROM `".getTableForItemType(__CLASS__)."` AND itemtype = '".$item->getType()."' AND items_id = '".$item->getID()."')";
-         foreach ($DB->request($query) as $use) {
-            $used[] = $use['id'];
+         $out .= $header_begin.$header_bottom.$header_end;
+         $out .= "</table>\n";
+
+         if ($canedit) {
+            $massiveactionparams['ontop'] = false;
+            echo $out; $out = "";
+            Html::showMassiveActions($massiveactionparams);
+            Html::closeForm();
          }
-         Dropdown::show('PluginRaisemanagerRaisetemplate',
-                        array ('name' => "templates_id",
-                               'entity' => $item->fields['entities_id'], 'used' => $used));
-         echo "</td>";
-         echo "<td colspan='2' class='center' class='tab_bg_2'>";
-         echo "<input type='submit' name='additem' value=\""._sx('button', 'Save')."\" class='submit'>";
-         echo "</td></tr>";
-
-         if (!empty($results)) {
-            Html::openArrowMassives('items', true);
-            Html::closeArrowMassives(array ('delete_items' => _sx('button', 'Disconnect')));
-         }
+      } else {
+         $out .= "<p class='center b'>".__('No template was linked', 'raisemanager')."</p>";
       }
-      echo "</table>";
-      Html::closeForm();
-      echo "</div>";
-   }
+      $out .= "</div>\n";
 
-   public function getTabNameForItem(CommonGLPI $item, $withtemplate=0) {
-      global $CFG_GLPI;
-
-      if (PluginRaisemanagerRaisetemplate::canView()) {
-         switch ($item->getType()) {
-            case 'PluginRaisemanagerRaisetemplate' :
-               if ($_SESSION['glpishow_count_on_tabs']) {
-                  return self::createTabEntry(self::getTypeName(2), self::countForTemplate($item));
-               }
-               return self::getTypeName(2);
-            default :
-               if ($_SESSION['glpishow_count_on_tabs']) {
-                  return self::createTabEntry(PluginRaisemanagerRaisetemplate::getTypeName(2),
-                                                self::countForItemByItemtype($item));
-               }
-               return _n('RaiseTemplate', 'Raise templates', 2);
-         }
+      if ($canedit) {
+         $rand = mt_rand();
+         $out .= "<div class='firstbloc'>";
+         $out .= "<form name='raiseleveltemplate_form$rand' id='raiseleveltemplate_form$rand' method='post' action='";
+         $out .= Toolbox::getItemTypeFormURL(__CLASS__)."'>";
+         $out .= "<table class='tab_cadre_fixe'>";
+         $out .= "<tr class='tab_bg_1'>";
+         $out .= "<th>" . __('Add a template', 'raisemanager') . "</th>";
+         $out .= "<th><input type='hidden' name='items_id' value='$ID'>";
+         $out .= "<input type='hidden' name='itemtype' value='PluginRaisemanagerRaiselevel'>";
+         echo $out; $out = "";
+         PluginRaisemanagerRaisetemplate::dropdown(['name' => 'templates_id',
+                                                    'used' => $used]);
+         $out .= "</th><th class='tab_bg_2 right'>";
+         $out .= "<input type='submit' name='add' value=\""._sx('button', 'Add')."\" class='submit'>";
+         $out .= "</th></tr>";
+         $out .= "</table>";
+         echo $out; $out = "";
+         Html::closeForm();
+         $out .= "</div>";
       }
-      return '';
-   }
-
-   /**
-    *
-    * Count the number of associated items for a raisetemplate item
-    *
-    * @param $item   RaiseTemplate object
-    **/
-   static function countForTemplate(PluginRaisemanagerRaisetemplate $item) {
-
-      $restrict = "`".getTableForItemType(__CLASS__)."`.`templates_id` = '".$item->getField('id')."'";
-
-      return countElementsInTable(array(getTableForItemType(__CLASS__)), $restrict);
-   }
-
-
-   static function displayTabContentForItem(CommonGLPI $item, $tabnum=1, $withtemplate=0) {
-      if (in_array(get_class($item), PluginRaisemanagerRaiseleveltemplate::getClasses())) {
-         self::showForItem($item);
-      } else if (get_class($item) == 'PluginRaisemanagerRaisetemplate') {
-         self::showForTemplate($item);
-      }
-      return true;
+      echo $out;
    }
 
    /**

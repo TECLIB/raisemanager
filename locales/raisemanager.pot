@@ -1,14 +1,14 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR Raisemanager Development Team
-# This file is distributed under the same license as the GLPI - Raisemanager plugin package.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: GLPI - Raisemanager plugin 0.0.1\n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-20 10:27+0100\n"
+"POT-Creation-Date: 2017-03-23 14:10+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,17 +16,9 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
-#: hook.php:48
-msgid "RaiseEvent"
-msgstr ""
-
-#: setup.php:128
-msgid "Installed / not configured"
-msgstr ""
-
-#: front/menu.php:33 front/menu.php:53 front/raisetemplate.form.php:58
-#: front/raisetemplate.php:33 inc/menu.class.php:33
+#: front/menu.php:33 front/menu.php:53 inc/menu.class.php:33
 msgid "Raises"
 msgstr ""
 
@@ -34,51 +26,90 @@ msgstr ""
 msgid "RaiseTemplates"
 msgstr ""
 
-#: front/menu.php:66 front/raiselevel.form.php:59 front/raiselevel.php:33
-#: inc/raiseleveltemplate.class.php:126
+#: front/menu.php:66
 msgid "RaiseLevels"
 msgstr ""
 
-#: inc/notification.inc.php:14
-msgid "Envoi de relances aux acteurs"
-msgstr ""
-
-#: inc/notification.inc.php:84
-msgid "Looping for items with type "
-msgstr ""
-
-#: inc/raiselevel.class.php:41 inc/raiselevel.class.php:88
-msgid "RaiseLevel"
-msgstr ""
-
-#: inc/raiselevel.class.php:120
-msgid "Is Multiple"
-msgstr ""
-
-#: inc/raiselevel.class.php:127
-msgid "Send Value"
-msgstr ""
-
-#: inc/raiselevel.class.php:131
-msgid "Send Type"
-msgstr ""
-
-#: inc/raiselevel.class.php:141
-msgid "Trigger Value"
-msgstr ""
-
-#: inc/raiselevel.class.php:145
-msgid "Trigger Type"
-msgstr ""
-
-#: inc/raiselog.class.php:38
+#: inc/raiselog.class.php:41
 msgid "RaiseLogs"
 msgstr ""
 
-#: inc/raisetemplate.class.php:43 inc/raisetemplate.class.php:86
-msgid "RaiseTemplate"
+#: inc/notification.class.php:14
+msgid "RaiseNotification"
 msgstr ""
 
-#: inc/raisetemplate.class.php:124
+#: inc/notification.class.php:95
+msgid "Looping for items with type "
+msgstr ""
+
+#: inc/raiseleveltemplate.class.php:236 inc/raiselevel.class.php:119
+msgid "Is Multiple"
+msgstr ""
+
+#: inc/raiseleveltemplate.class.php:237
+msgid "Send after"
+msgstr ""
+
+#: inc/raiseleveltemplate.class.php:238
+msgid "Trigger"
+msgstr ""
+
+#: inc/raiseleveltemplate.class.php:289
+msgid "No level was linked"
+msgstr ""
+
+#: inc/raiseleveltemplate.class.php:300
+msgid "Add a level"
+msgstr ""
+
+#: inc/raiseleveltemplate.class.php:371 inc/raisetemplate.class.php:106
 msgid "Subtypes"
+msgstr ""
+
+#: inc/raiseleveltemplate.class.php:412
+msgid "No template was linked"
+msgstr ""
+
+#: inc/raiseleveltemplate.class.php:423
+msgid "Add a template"
+msgstr ""
+
+#: inc/raisetemplate.class.php:44 hook.php:82
+msgid "Raise template"
+msgid_plural "Raise templates"
+msgstr[0] ""
+msgstr[1] ""
+
+#: inc/raiselevel.class.php:42 hook.php:86
+msgid "Raise level"
+msgid_plural "Raise levels"
+msgstr[0] ""
+msgstr[1] ""
+
+#: inc/raiselevel.class.php:64
+msgid "RaiseLevel"
+msgstr ""
+
+#: inc/raiselevel.class.php:126
+msgid "Send Value"
+msgstr ""
+
+#: inc/raiselevel.class.php:130
+msgid "Send Type"
+msgstr ""
+
+#: inc/raiselevel.class.php:140
+msgid "Trigger Value"
+msgstr ""
+
+#: inc/raiselevel.class.php:144
+msgid "Trigger Type"
+msgstr ""
+
+#: setup.php:108
+msgid "Installed / not configured"
+msgstr ""
+
+#: hook.php:100
+msgid "Raise event"
 msgstr ""

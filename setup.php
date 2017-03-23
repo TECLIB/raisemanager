@@ -42,7 +42,7 @@ function plugin_init_raisemanager() {
    $plugin = new Plugin();
    if ($plugin->isInstalled("raisemanager") && $plugin->isActivated("raisemanager")) {
 
-      Plugin::registerClass('PluginRaisemanagerCategorytemplate');
+      Plugin::registerClass('PluginRaisemanagerCategorytemplate', ['addtabon' => 'ITILCategory']);
       Plugin::registerClass('PluginRaisemanagerRaisetemplate');
       Plugin::registerClass('PluginRaisemanagerRaiselevel');
 

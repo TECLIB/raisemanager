@@ -79,12 +79,23 @@ function plugin_raisemanager_uninstall() {
  */
 function plugin_raisemanager_getDropdown() {
 
-   $pluginDropdowns = [ 'PluginRaisemanagerRaisetemplate' => __('RaiseTemplate', 'raisemanager'),
-                        'PluginRaisemanagerRaiselevel'    => __('RaiseLevel', 'raisemanager')];
+   $pluginDropdowns = [ 'PluginRaisemanagerRaisetemplate' => _n('Raise template',
+                                                                'Raise templates',
+                                                                Session::getPluralNumber(),
+                                                                'raisemanager'),
+                        'PluginRaisemanagerRaiselevel'    => _n('Raise level',
+                                                                'Raise levels',
+                                                                Session::getPluralNumber(),
+                                                                'raisemanager')];
 
    return $pluginDropdowns;
 }
 
+/**
+ * Add notification events to GLPI.
+ *
+ * @see NotificationTarget::getAllEvents()
+ */
 function plugin_raisemanager_add_events(NotificationTargetCommonITILObject $target) {
-   $target->events['plugin_raisemanager'] = __("RaiseEvent", 'raisemanager');
+   $target->events['plugin_raisemanager'] = __('Raise event', 'raisemanager');
 }
