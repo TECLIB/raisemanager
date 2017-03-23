@@ -270,9 +270,13 @@ class PluginRaisemanagerRaiseleveltemplate extends CommonDBTM {
             $out .= $item->getDurationType($item->getField('send_unit'));
             $out .= "</td>";
             $out .= "<td class='center'>";
-            $out .= $item->getField('trigger_value');
-            $out .= " ";
-            $out .= $item->getDurationType($item->getField('trigger_unit'));
+            if ($item->getField('trigger_is_multiple')) {
+               $out .= $item->getField('trigger_value');
+               $out .= " ";
+               $out .= $item->getDurationType($item->getField('trigger_unit'));
+            } else {
+               $out .= __('Single send', 'raisemanager');
+            }
             $out .= "</td></tr>";
          }
 

@@ -53,6 +53,10 @@ msgstr "Déclenchement après"
 msgid "Trigger"
 msgstr "Relance tous les"
 
+#: inc/raiseleveltemplate.class.php:278
+msgid "Single send"
+msgstr "Envoi unique"
+
 #: inc/raiseleveltemplate.class.php:289
 msgid "No level was linked"
 msgstr "Aucun niveau de relance lié"
