@@ -63,7 +63,7 @@ class PluginRaisemanagerNotification extends CommonDBTM {
                   // Retrieve imtemtypes which passed minimum triggering time and has never been notified,
                   // or itemtypes which has been already notified but which last notify time is greater than frequency
                   $aQueries[$iCurrentLevelID.':'.$iCurrentLevelValue.':'.$sItemType] = 'SELECT T.id FROM '.getTableForItemType($sItemType).' AS T 
-                 LEFT JOIN '.getTableForItemType('PluginRaisemanagerRaiselog').' AS log ON T.id = log.items_id AND log.itemtype = "'.$sItemType.'" AND log.levels_id = '.$iCurrentLevelID.' WHERE status < 5 AND due_date != "" AND ((log.items_id IS NULL AND NOW() > DATE_ADD(date, '.$sTriggerAfter.')) OR (NOW() > DATE_ADD(log.date_last_sent, '.$sRepeatAfter.') AND log.items_id IS NOT NULL)) '.getEntitiesRestrictRequest("AND", 'T', 'entities_id', $row['entities_id'], $row['is_recursive']).$sItilCategories;
+                 LEFT JOIN '.getTableForItemType('PluginRaisemanagerRaiselog').' AS log ON T.id = log.items_id AND log.itemtype = "'.$sItemType.'" AND log.levels_id = '.$iCurrentLevelID.' WHERE status < 5 AND ((log.items_id IS NULL AND NOW() > DATE_ADD(date, '.$sTriggerAfter.')) OR (NOW() > DATE_ADD(log.date_last_sent, '.$sRepeatAfter.') AND log.items_id IS NOT NULL)) '.getEntitiesRestrictRequest("AND", 'T', 'entities_id', $row['entities_id'], $row['is_recursive']).$sItilCategories;
                }
              break;
 
@@ -73,7 +73,7 @@ class PluginRaisemanagerNotification extends CommonDBTM {
                   // Retrieve itemtypes concerned and which hasn't been notified yet
                   $aQueries[$iCurrentLevelID.':'.$iCurrentLevelValue.':'.$sItemType] = 'SELECT T.id FROM '.getTableForItemType($sItemType).' AS T 
                  LEFT JOIN '.getTableForItemType('PluginRaisemanagerRaiselog').' AS log ON T.id = log.items_id AND log.itemtype = "'.$sItemType.'" AND levels_id = '.$iCurrentLevelID.' 
-                 WHERE log.items_id IS NULL AND status < 5 AND due_date != "" AND NOW() > DATE_ADD(date, '.$sTriggerAfter.') '.getEntitiesRestrictRequest("AND", 'T', 'entities_id', $row['entities_id'], $row['is_recursive']).$sItilCategories;
+                 WHERE log.items_id IS NULL AND status < 5 AND NOW() > DATE_ADD(date, '.$sTriggerAfter.') '.getEntitiesRestrictRequest("AND", 'T', 'entities_id', $row['entities_id'], $row['is_recursive']).$sItilCategories;
                }
              break;
          }
