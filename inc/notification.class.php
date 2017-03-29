@@ -36,7 +36,7 @@ class PluginRaisemanagerNotification extends CommonDBTM {
       LEFT JOIN glpi_plugin_raisemanager_categorytemplates AS tmplitilcat ON tmplitilcat.templates_id = tmpl.id 
       LEFT JOIN glpi_calendars AS cal ON tmpl.calendars_id = cal.id
       LEFT JOIN glpi_calendarsegments AS calseg ON calseg.calendars_id = cal.id
-      WHERE calseg.day = DAYOFWEEK(NOW()) AND DATE_FORMAT(NOW(), \'%H:%i:%s\') BETWEEN calseg.begin AND calseg.end  
+      WHERE (calseg.day = DATE_FORMAT(NOW(), \'%w\') AND DATE_FORMAT(NOW(), \'%H:%i:%s\') BETWEEN calseg.begin AND calseg.end) OR ISNULL(cal.id)  
       GROUP BY lvl.id ORDER BY send_total_value DESC';
 
       $aQueries = array();
